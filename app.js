@@ -1,0 +1,108 @@
+/* ============================================================
+   메인 페이지(index.html) 전용 스크립트
+   ─ 헤더/푸터는 common.js 가 담당합니다.
+   ─ 이 파일은 슬라이드/퀵버튼/상담진/협력기관띠/둘러보기/지도 담당.
+   ============================================================ */
+const $ = (id) => document.getElementById(id);
+
+/* ---------- 메인 슬라이드 ---------- */
+(function(){
+  const wrap = $('slides');
+  if(!wrap) return;
+  wrap.innerHTML = SITE.slides.map((s,i)=>`
+    <div class="slide ${i===0?'active':''}" data-i="${i}">
+      ${s.image
+        ? `<img class="slide-bg" src="images/${s.image}" alt=""
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+           <div class="slide-noimg" style="display:none">센터 이미지 (준비 중)</div>`
+        : `<div class="slide-noimg" style="display:flex">센터 이미지 ${i+1} (준비 중)</div>`}
+      <div class="slide-overlay"></div>
+      <div class="slide-text ${s.align||'center'}">
+        ${s.title?`<h2>${s.title}</h2>`:''}
+        ${s.sub?`<p>${s.sub}</p>`:''}
+      </div>
+    </div>`).join('');
+
+  const slides = [...wrap.querySelectorAll('.slide')];
+  const dotsWrap = $('slideDots');
+  dotsWrap.innerHTML = slides.map((_,i)=>`<button data-i="${i}" class="${i===0?'on':''}"></button>`).join('');
+  const dots = [...dotsWrap.querySelectorAll('button')];
+  let cur = 0, timer;
+  function go(n){
+    cur = (n + slides.length) % slides.length;
+    slides.forEach((s,i)=>s.classList.toggle('active', i===cur));
+    dots.forEach((d,i)=>d.classList.toggle('on', i===cur));
+  }
+  function next(){ go(cur+1); }
+  function reset(){ if(SITE.slideAutoSec>0){ clearInterval(timer); timer=setInterval(next, SITE.slideAutoSec*1000);} }
+  $('slideNext').onclick = ()=>{ next(); reset(); };
+  $('slidePrev').onclick = ()=>{ go(cur-1); reset(); };
+  dots.forEach(d=> d.onclick = ()=>{ go(+d.dataset.i); reset(); });
+  if(slides.length>1) reset();
+  else { $('slideNext').style.display='none'; $('slidePrev').style.display='none'; dotsWrap.style.display='none'; }
+})();
+
+/* ---------- 3개 퀵버튼 ---------- */
+(function(){
+  $('quickGrid').innerHTML = SITE.quickButtons.map((b,i)=>`
+    <div class="quick-card" data-action="${b.action}" data-i="${i}">
+      <h3>${b.label}</h3>
+      <p>${b.desc||''}</p>
+      <div class="arrow">→</div>
+    </div>`).join('');
+  $('quickGrid').querySelectorAll('.quick-card').forEach(card=>{
+    card.onclick = ()=>{
+      const a = card.dataset.action;
+      if(a==='counselor') location.hash='#counselor';
+      else if(a==='tour') openTour();
+      else if(a==='apply') window.open(SITE.applyForm,'_blank');
+      else if(a && a.startsWith('http')) window.open(a,'_blank');
+    };
+  });
+})();
+
+/* ---------- 상담진 소개 ---------- */
+function setText(id, txt){ const el=$(id); if(el) el.textContent = txt; }
+setText('cName', SITE.counselor.name);
+setText('cRole', SITE.counselor.title);
+setText('cPhil', SITE.counselor.philosophy);
+$('cCareer').innerHTML = SITE.counselor.career.map(c=>`<li>${c}</li>`).join('');
+if(SITE.counselor.photo){
+  $('portrait').innerHTML = `<img src="images/${SITE.counselor.photo}" alt="${SITE.counselor.name}">`;
+}
+
+/* ---------- 협력기관 흐르는 띠 ---------- */
+(function(){
+  const one = SITE.partners.map(p=>{
+    const inner = p.logo ? `<img src="images/${p.logo}" alt="${p.label}">` : p.label;
+    return p.url
+      ? `<a class="partner-item link" href="${p.url}" target="_blank" rel="noopener">${inner}</a>`
+      : `<span class="partner-item">${inner}</span>`;
+  }).join('');
+  $('partnersTrack').innerHTML = one + one;
+})();
+
+/* ---------- 상담소 둘러보기 모달 ---------- */
+let tourIdx = 0;
+function openTour(){
+  if(!SITE.tourPhotos.length) return;
+  tourIdx = 0; showTour();
+  $('tourModal').classList.add('on');
+}
+function showTour(){
+  $('tourImg').src = 'images/' + SITE.tourPhotos[tourIdx];
+  $('tourCount').textContent = `${tourIdx+1} / ${SITE.tourPhotos.length}`;
+}
+$('tourClose').onclick = ()=> $('tourModal').classList.remove('on');
+$('tourPrev').onclick = ()=>{ tourIdx=(tourIdx-1+SITE.tourPhotos.length)%SITE.tourPhotos.length; showTour(); };
+$('tourNext').onclick = ()=>{ tourIdx=(tourIdx+1)%SITE.tourPhotos.length; showTour(); };
+$('tourModal').onclick = (e)=>{ if(e.target===$('tourModal')) $('tourModal').classList.remove('on'); };
+// 다른 페이지에서 '둘러보기' 누르면 index.html#tour 로 오는데, 그때 자동으로 팝업 열기
+if(location.hash === '#tour'){ setTimeout(openTour, 300); }
+
+/* ---------- 오시는 길 지도 ---------- */
+setText('addrLead', SITE.address);
+$('mapWrap').innerHTML = SITE.mapImage
+  ? `<img src="images/${SITE.mapImage}" alt="오시는 길 지도"
+       onerror="this.parentNode.innerHTML='<div class=\\'map-noimg\\'>지도 이미지 (준비 중)</div>'">`
+  : `<div class="map-noimg">지도 이미지 (준비 중)</div>`;

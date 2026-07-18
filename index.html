@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>사유담심리상담연구소 · 원주 사진치료 심리상담</title>
+<meta name="description" content="원주 사진치료 심리상담. 사유담심리상담연구소.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===== 공통 헤더(네비게이션)가 여기 자동 생성됩니다 ===== -->
+<div id="siteHeader"></div>
+
+<!-- ===== 메인 슬라이드 ===== -->
+<div class="hero-slider" id="top">
+  <div id="slides"></div>
+  <button class="slide-nav slide-prev" id="slidePrev" aria-label="이전">‹</button>
+  <button class="slide-nav slide-next" id="slideNext" aria-label="다음">›</button>
+  <div class="slide-dots" id="slideDots"></div>
+</div>
+
+<!-- ===== 3개 퀵버튼 ===== -->
+<div class="quick">
+  <div class="wrap">
+    <div class="quick-grid" id="quickGrid"></div>
+  </div>
+</div>
+
+<!-- ===== 상담진 소개 ===== -->
+<section id="counselor">
+  <div class="wrap">
+    <div class="eyebrow">Counselor</div>
+    <h2 class="section-title">상담진 소개</h2>
+    <p class="section-lead">사유담의 모든 상담은 대표 상담사가 직접 진행합니다.</p>
+    <div class="counselor-grid">
+      <div class="portrait" id="portrait">상담사 사진<br>(준비 중)</div>
+      <div>
+        <div class="counselor-name" id="cName"></div>
+        <div class="counselor-role" id="cRole"></div>
+        <blockquote class="counselor-phil" id="cPhil"></blockquote>
+        <ul class="career-list" id="cCareer"></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 협력기관 흐르는 띠 ===== -->
+<div class="partners">
+  <div class="partners-track" id="partnersTrack"></div>
+</div>
+
+<!-- ===== 오시는 길 ===== -->
+<section class="location" id="location">
+  <div class="wrap">
+    <div class="eyebrow">Location</div>
+    <h2 class="section-title">오시는 길</h2>
+    <p class="section-lead addr" id="addrLead" style="font-family:'Gowun Batang',serif;color:var(--ink)"></p>
+    <div class="map-img-wrap" id="mapWrap"></div>
+  </div>
+</section>
+
+<!-- ===== 공통 하단 정보 바 + 푸터가 여기 자동 생성됩니다 ===== -->
+<div id="siteFooter"></div>
+
+<!-- ===== 상담소 둘러보기 모달 ===== -->
+<div class="tour-modal" id="tourModal">
+  <div class="tour-head">
+    <h3>상담소 둘러보기</h3>
+    <button class="tour-close" id="tourClose">×</button>
+  </div>
+  <div class="tour-viewer">
+    <button class="tour-arrow tour-prev" id="tourPrev">‹</button>
+    <img id="tourImg" src="" alt="상담소 내부">
+    <button class="tour-arrow tour-next" id="tourNext">›</button>
+  </div>
+  <div class="tour-count" id="tourCount"></div>
+</div>
+
+<script src="data.js"></script>
+<script src="common.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
