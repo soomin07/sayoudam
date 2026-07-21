@@ -11,6 +11,24 @@ const ROOT = IN_PAGES ? '../' : '';
 
 function _(id){ return document.getElementById(id); }
 
+/* ---------- 상담사 이력 HTML 만들기 (index + 상담사 소개 페이지 공용) ---------- */
+function buildCareerHTML(c){
+  function list(items){ return `<ul class="career-list">${items.map(i=>`<li>${i}</li>`).join('')}</ul>`; }
+  function block(label, items){ return `<div class="prof-block"><h4 class="prof-label">${label}</h4>${list(items)}</div>`; }
+  let html = '';
+  if(c.highlights && c.highlights.length) html += `<ul class="career-list career-top">${c.highlights.map(i=>`<li>${i}</li>`).join('')}</ul>`;
+  if(c.education && c.education.length) html += block('학력', c.education);
+  if(c.licenses && c.licenses.length) html += block('자격', c.licenses);
+  if(c.more && c.more.length){
+    const inner = c.more.map(g=>block(g.group, g.items)).join('');
+    html += `<details class="prof-toggle">
+      <summary><span class="pt-txt">전체 이력 더보기</span><span class="pt-ico" aria-hidden="true">＋</span></summary>
+      <div class="prof-more">${inner}</div>
+    </details>`;
+  }
+  return html;
+}
+
 /* target(메뉴 목적지)을 실제 링크 주소로 변환 */
 function resolveTarget(t){
   if(!t || t==='#') return '#';
@@ -26,9 +44,10 @@ function renderHeader(){
   const host = _('siteHeader');
   if(!host) return;
 
+  const brandText = `<span class="txt">${SITE.centerName}<small>${SITE.centerNameEn}</small></span>`;
   const brandInner = SITE.logo
-    ? `<img src="${ROOT}images/${SITE.logo}" alt="${SITE.centerName}">`
-    : `<span class="txt">${SITE.centerName}<small>${SITE.centerNameEn}</small></span>`;
+    ? `<img class="brand-logo" src="${ROOT}images/${SITE.logo}" alt="${SITE.centerName}">${brandText}`
+    : brandText;
 
   const navHtml = SITE.nav.map(g=>`
     <div class="nav-group">
@@ -91,15 +110,16 @@ function renderFooter(){
           <h4>문 의 처</h4>
           <div class="big">${SITE.phone}</div>
           ${SITE.phone2?`<div class="big" style="font-size:1.15rem">${SITE.phone2}</div>`:''}
-          ${SITE.email?`<div style="color:#cbc6ba;margin-top:8px;font-size:.92rem">${SITE.email}</div>`:''}
+          ${SITE.email?`<div style="color:#cbc6ba;margin-top:10px;font-size:.92rem">E-MAIL: ${SITE.email}</div>`:''}
         </div>
         <div class="cb-block">
           <h4>운 영 시 간</h4>
+          ${SITE.hoursNote?`<div class="cb-hours-note">${SITE.hoursNote}</div>`:''}
           ${hoursHtml}
         </div>
         <div class="cb-block">
           <h4>주 소</h4>
-          <div style="color:#cbc6ba;font-size:.95rem;line-height:1.9">${SITE.address}</div>
+          <div style="color:#cbc6ba;font-size:.95rem;line-height:1.9">${SITE.addressBr || SITE.address}</div>
         </div>
         <div class="cb-block">
           <h4>채 널</h4>
@@ -110,7 +130,7 @@ function renderFooter(){
     <footer>
       <div class="wrap foot-inner">
         <div class="fname">${SITE.centerName}${SITE.representative?' | 대표: '+SITE.representative:''}</div>
-        <p>주소: ${SITE.address}</p>
+        <p>주소: ${SITE.addressBr || SITE.address}</p>
         <p>T. ${SITE.phone}${SITE.email?' | E. '+SITE.email:''}</p>
         ${SITE.businessNumber?`<p>사업자등록번호: ${SITE.businessNumber}</p>`:''}
       </div>

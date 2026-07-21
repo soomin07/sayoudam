@@ -23,7 +23,41 @@
 
 <div class="page-body">
   <div class="wrap">
-    <p>신현자 | 사유담심리상담연구소 대표 · 사진치료 전문강사</p><div class='placeholder-box'>학력·경력·자격증 등 상세 프로필 준비 중입니다.</div>
+    <div class="counselor-grid">
+      <div class="portrait" id="cPortrait">상담사 사진<br>(준비 중)</div>
+      <div>
+        <div class="counselor-name" id="cName2"></div>
+        <div class="counselor-role" id="cRole2"></div>
+        <blockquote class="counselor-phil" id="cPhil2"></blockquote>
+        <div class="prof-wrap" id="cCareer2"></div>
+      </div>
+    </div>
+
+    <div class="coming-team">
+      <h2>함께할 상담 선생님</h2>
+      <p class="ct-lead">사유담과 함께할 상담 선생님을 곧 소개해 드리겠습니다.</p>
+
+      <div class="counselor-grid coming-profile">
+        <div class="portrait">상담사 사진<br>(준비 중)</div>
+        <div>
+          <span class="coming-badge">준비 중</span>
+          <div class="counselor-name coming-name">상담사</div>
+          <div class="counselor-role">프로필 준비 중</div>
+          <blockquote class="counselor-phil">상담 선생님을 곧 소개해 드리겠습니다.</blockquote>
+        </div>
+      </div>
+
+      <div class="counselor-grid coming-profile">
+        <div class="portrait">상담사 사진<br>(준비 중)</div>
+        <div>
+          <span class="coming-badge">준비 중</span>
+          <div class="counselor-name coming-name">상담사</div>
+          <div class="counselor-role">프로필 준비 중</div>
+          <blockquote class="counselor-phil">상담 선생님을 곧 소개해 드리겠습니다.</blockquote>
+        </div>
+      </div>
+    </div>
+
     <a class="back-home" href="../index.html">← 홈으로 돌아가기</a>
   </div>
 </div>
@@ -32,5 +66,17 @@
 
 <script src="../data.js"></script>
 <script src="../common.js"></script>
+<script>
+(function(){
+  var c = SITE.counselor;
+  document.getElementById('cName2').textContent = c.name;
+  document.getElementById('cRole2').textContent = c.title;
+  document.getElementById('cPhil2').textContent = c.philosophy;
+  document.getElementById('cCareer2').innerHTML = buildCareerHTML(c);
+  if(c.photo){
+    document.getElementById('cPortrait').innerHTML = '<img src="../images/' + c.photo + '" alt="' + c.name + '">';
+  }
+})();
+</script>
 </body>
 </html>

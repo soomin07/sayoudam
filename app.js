@@ -66,20 +66,52 @@ function setText(id, txt){ const el=$(id); if(el) el.textContent = txt; }
 setText('cName', SITE.counselor.name);
 setText('cRole', SITE.counselor.title);
 setText('cPhil', SITE.counselor.philosophy);
-$('cCareer').innerHTML = SITE.counselor.career.map(c=>`<li>${c}</li>`).join('');
+$('cCareer').innerHTML = buildCareerHTML(SITE.counselor);
 if(SITE.counselor.photo){
   $('portrait').innerHTML = `<img src="images/${SITE.counselor.photo}" alt="${SITE.counselor.name}">`;
 }
 
-/* ---------- 협력기관 흐르는 띠 ---------- */
+/* ---------- 협력기관 흐르는 띠 (끊김 없는 무한 루프) ---------- */
 (function(){
+  const track = $('partnersTrack');
+  if(!track || !SITE.partners.length) return;
   const one = SITE.partners.map(p=>{
     const inner = p.logo ? `<img src="images/${p.logo}" alt="${p.label}">` : p.label;
     return p.url
       ? `<a class="partner-item link" href="${p.url}" target="_blank" rel="noopener">${inner}</a>`
       : `<span class="partner-item">${inner}</span>`;
   }).join('');
-  $('partnersTrack').innerHTML = one + one;
+
+  // 한 세트를 만들고, 화면 폭을 채우고도 남을 만큼 복제한다
+  track.innerHTML = `<div class="pset">${one}</div>`;
+  const container = track.parentElement;
+  const first = track.querySelector('.pset');
+  const setWidth = first.offsetWidth;
+  if(setWidth === 0) return;
+  // 화면 폭 + 한 세트만큼 여유가 생기도록 복제
+  while(track.scrollWidth < container.offsetWidth + setWidth){
+    track.appendChild(first.cloneNode(true));
+  }
+  track.appendChild(first.cloneNode(true)); // 안전 여유분 한 세트 더
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce) return;
+
+  const speed = 40;           // 초당 이동 픽셀
+  let x = 0, last = null, paused = false;
+  track.addEventListener('mouseenter', ()=> paused = true);
+  track.addEventListener('mouseleave', ()=> paused = false);
+  function tick(ts){
+    if(last == null) last = ts;
+    const dt = (ts - last) / 1000; last = ts;
+    if(!paused){
+      x -= speed * dt;
+      if(x <= -setWidth) x += setWidth;   // 한 세트 지나면 원위치 → 이음새 없음
+      track.style.transform = `translateX(${x}px)`;
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
 })();
 
 /* ---------- 상담소 둘러보기 모달 ---------- */
