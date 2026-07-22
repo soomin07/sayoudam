@@ -23,8 +23,19 @@
 
 <div class="page-body">
   <div class="wrap">
-    <p>강원특별자치도 원주시 입춘로 45 엔터비즈타워 B동 1321호</p>
-    <div class='placeholder-box'>오시는 길 안내를 준비하고 있습니다.</div>
+    <div class="info-box">
+      <div class="info-row"><span class="k">주소</span><span class="v">강원특별자치도 원주시 입춘로 45<br>엔터비즈타워 B동 1321호</span></div>
+      <div class="info-row"><span class="k">전화</span><span class="v">010-4684-0542</span></div>
+    </div>
+
+    <p class="muted" style="margin:6px 0 14px">아래 지도에서 주변 위치를 확인하실 수 있고, 길찾기는 네이버지도 버튼을 이용해 주세요.</p>
+
+    <div style="text-align:center;margin-bottom:16px">
+      <a class="naver-btn" href="https://map.naver.com/p/entry/place/2046821271?c=15.00,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607222132%26locale%3Dko%26svcName%3Dmap_pcv5" target="_blank" rel="noopener"><span class="nb-mark">N</span>네이버지도에서 길찾기</a>
+    </div>
+
+    <div id="kakaoMap" style="width:100%;height:380px;border:1px solid var(--line);border-radius:4px;background:var(--paper-deep);display:flex;align-items:center;justify-content:center;color:var(--ink-soft);font-size:.9rem">지도를 불러오는 중입니다…</div>
+
     <a class="back-home" href="../index.html">← 홈으로 돌아가기</a>
   </div>
 </div>
@@ -33,5 +44,30 @@
 
 <script src="../data.js"></script>
 <script src="../common.js"></script>
+
+<!-- 카카오 지도 -->
+<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=46970350652ce382f2b139fda1c9e3fa&libraries=services&autoload=false"></script>
+<script>
+(function(){
+  if(!window.kakao || !kakao.maps) return;   // 로컬 파일 등에서 SDK 미로딩 시 안내 문구 유지
+  kakao.maps.load(function(){
+    var el = document.getElementById('kakaoMap');
+    if(!el) return;
+    el.innerHTML = '';
+    var map = new kakao.maps.Map(el, { center: new kakao.maps.LatLng(37.3422, 127.9202), level: 3 });
+    map.addControl(new kakao.maps.ZoomControl(), kakao.maps.ControlPosition.RIGHT);
+    var geocoder = new kakao.maps.services.Geocoder();
+    geocoder.addressSearch('강원특별자치도 원주시 입춘로 45', function(result, status){
+      if(status === kakao.maps.services.Status.OK){
+        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+        map.setCenter(coords);
+        var marker = new kakao.maps.Marker({ map: map, position: coords });
+        var iw = new kakao.maps.InfoWindow({ content: '<div style="padding:6px 10px;font-size:13px;white-space:nowrap;font-family:sans-serif">사유담심리상담연구소</div>' });
+        iw.open(map, marker);
+      }
+    });
+  });
+})();
+</script>
 </body>
 </html>

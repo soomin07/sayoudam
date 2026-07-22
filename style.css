@@ -24,7 +24,7 @@ section{padding:90px 0}
 .brand-logo{height:60px;width:60px;object-fit:cover;border-radius:9px;flex:0 0 auto}
 .brand .txt{font-family:'Gowun Batang',serif;font-weight:700;font-size:1.55rem}
 .brand .txt small{display:block;font-family:'Gowun Dodum';font-weight:400;font-size:.66rem;letter-spacing:.34em;color:var(--ink-soft)}
-.top-apply{padding:9px 20px;background:var(--accent);color:var(--paper);border-radius:2px;font-size:.9rem;transition:.25s}
+.top-apply{padding:9px 20px;background:var(--accent);color:var(--paper);border-radius:2px;font-size:.9rem;white-space:nowrap;transition:.25s}
 .top-apply:hover{background:var(--accent-deep)}
 .nav-toggle{display:none;background:none;border:0;font-size:1.6rem;color:var(--ink);cursor:pointer}
 
@@ -106,12 +106,12 @@ section{padding:90px 0}
 @keyframes profFade{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
 
 /* ===== 협력기관 흐르는 띠 ===== */
-.partners{background:var(--dark);padding:38px 0;overflow:hidden}
+.partners{background:var(--dark);padding:15px 0;overflow:hidden}
 .partners-track{display:flex;gap:0;width:max-content;will-change:transform}
 .pset{display:flex;flex:0 0 auto}
-.partner-item{display:flex;align-items:center;justify-content:center;padding:0 44px;height:56px;color:#cbc6ba;font-size:1rem;white-space:nowrap;border-right:1px solid rgba(255,255,255,.08);transition:.25s}
+.partner-item{display:flex;align-items:center;justify-content:center;padding:0 34px;height:34px;color:#cbc6ba;font-size:.92rem;white-space:nowrap;border-right:1px solid rgba(255,255,255,.08);transition:.25s}
 .partner-item:hover{color:#fff}
-.partner-item img{height:44px;width:auto;filter:brightness(0) invert(1) opacity(.8)}
+.partner-item img{height:26px;width:auto;filter:brightness(0) invert(1) opacity(.8)}
 .partner-item.link{cursor:pointer}
 
 /* ===== 상담소 둘러보기 (모달) ===== */
@@ -174,11 +174,15 @@ footer{background:var(--darker);color:#a99a97;padding:40px 0;font-size:.85rem}
   .nav-drop a{text-align:left;padding-left:24px}
 }
 @media(max-width:520px){
+  body{zoom:1}
   .contact-grid{grid-template-columns:1fr}
-  .topbar-top{height:74px}
-  .brand-logo{height:46px;width:46px}
-  .brand .txt{font-size:1.12rem}
-  .brand .txt small{font-size:.55rem;letter-spacing:.25em}
+  .topbar-top{height:66px;gap:8px}
+  .brand{gap:9px;min-width:0}
+  .brand-logo{height:40px;width:40px}
+  .brand .txt{font-size:1.02rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .brand .txt small{font-size:.5rem;letter-spacing:.22em}
+  .top-apply{padding:7px 13px;font-size:.8rem}
+  .nav-toggle{font-size:1.5rem}
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto}}
 /* ===== 하위 페이지 공통 ===== */
@@ -275,6 +279,10 @@ footer{background:var(--darker);color:#a99a97;padding:40px 0;font-size:.85rem}
 .coming-profile:last-child{margin-bottom:0}
 .coming-profile .coming-name{color:var(--ink-soft)}
 .coming-badge{display:inline-block;background:var(--paper-deep);border:1px solid var(--line);color:var(--ink-soft);font-size:.72rem;padding:4px 12px;border-radius:20px;margin-bottom:12px}
+/* ===== 네이버지도 버튼 ===== */
+.naver-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 26px;background:var(--accent);color:#fff;border-radius:30px;font-size:.98rem;font-weight:700;transition:.2s;box-shadow:0 4px 14px rgba(92,21,32,.25)}
+.naver-btn:hover{background:var(--accent-deep);transform:translateY(-2px);box-shadow:0 6px 18px rgba(92,21,32,.32)}
+.naver-btn .nb-mark{width:20px;height:20px;border-radius:5px;background:#03C75A;color:#fff;font-weight:800;font-size:.8rem;display:flex;align-items:center;justify-content:center;font-family:Arial,sans-serif}
 /* ===== 인사말 ===== */
 .greeting p{font-family:'Gowun Batang',serif;font-size:1.05rem;line-height:2;color:var(--ink);margin-bottom:20px}
 .greeting .greet-lead{font-size:1.18rem;color:var(--accent-deep)}
