@@ -136,7 +136,7 @@ section{padding:90px 0}
 .loc-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
 .loc-head{align-items:center}
 .loc-head .section-title{margin-bottom:0;line-height:1}
-.naver-btn.naver-btn-sm .nb-arw{margin-left:4px;font-size:1.32em;line-height:1;opacity:.72}
+.naver-btn.naver-btn-sm .nb-arw{margin-left:4px;font-size:1.32em;line-height:1;opacity:.72;position:relative;top:-2px}
 .naver-btn.naver-btn-sm{position:relative;top:3px;padding:6px 16px;font-size:.72rem;line-height:1;font-weight:400;gap:6px;letter-spacing:.02em;background:transparent;color:var(--accent);border:1px solid rgba(125,31,44,.32);box-shadow:none}
 .naver-btn.naver-btn-sm:hover{background:rgba(125,31,44,.07);color:var(--accent-deep);transform:none;box-shadow:none}
 .naver-btn.naver-btn-sm .nb-mark{width:14px;height:14px;font-size:.56rem;border-radius:4px}
