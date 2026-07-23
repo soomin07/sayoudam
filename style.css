@@ -135,9 +135,9 @@ section{padding:90px 0}
 /* 홈 오시는 길: 제목 옆 작은 네이버 버튼 */
 .loc-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
 .loc-head .section-title{margin-bottom:0}
-.naver-btn-sm{padding:5px 12px;font-size:.76rem;font-weight:400;gap:6px;background:transparent;color:var(--accent);border:1px solid rgba(125,31,44,.3);box-shadow:none}
-.naver-btn-sm:hover{background:rgba(125,31,44,.07);color:var(--accent-deep);transform:none;box-shadow:none}
-.naver-btn-sm .nb-mark{width:15px;height:15px;font-size:.62rem}
+.naver-btn.naver-btn-sm{padding:3px 16px;font-size:.72rem;font-weight:400;gap:6px;letter-spacing:.02em;background:transparent;color:var(--accent);border:1px solid rgba(125,31,44,.32);box-shadow:none}
+.naver-btn.naver-btn-sm:hover{background:rgba(125,31,44,.07);color:var(--accent-deep);transform:none;box-shadow:none}
+.naver-btn.naver-btn-sm .nb-mark{width:14px;height:14px;font-size:.56rem;border-radius:4px}
 .map-img-wrap img{width:100%;display:block}
 .map-noimg{padding:100px 20px;text-align:center;color:var(--ink-soft)}
 .dir-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:20px;margin-top:24px}
