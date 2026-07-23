@@ -134,7 +134,9 @@ section{padding:90px 0}
 .map-box{width:100%;max-width:820px;margin-left:auto;margin-right:auto}
 /* 홈 오시는 길: 제목 옆 작은 네이버 버튼 */
 .loc-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
-.loc-head .section-title{margin-bottom:0}
+.loc-head{align-items:center}
+.loc-head .section-title{margin-bottom:0;line-height:1}
+.naver-btn.naver-btn-sm .nb-arw{margin-left:4px;font-size:1.15em;line-height:1;opacity:.75}
 .naver-btn.naver-btn-sm{padding:3px 16px;font-size:.72rem;font-weight:400;gap:6px;letter-spacing:.02em;background:transparent;color:var(--accent);border:1px solid rgba(125,31,44,.32);box-shadow:none}
 .naver-btn.naver-btn-sm:hover{background:rgba(125,31,44,.07);color:var(--accent-deep);transform:none;box-shadow:none}
 .naver-btn.naver-btn-sm .nb-mark{width:14px;height:14px;font-size:.56rem;border-radius:4px}
