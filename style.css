@@ -279,6 +279,9 @@ footer{background:var(--darker);color:#a99a97;padding:40px 0;font-size:.85rem}
 .coming-profile:last-child{margin-bottom:0}
 .coming-profile .coming-name{color:var(--ink-soft)}
 .coming-badge{display:inline-block;background:var(--paper-deep);border:1px solid var(--line);color:var(--ink-soft);font-size:.72rem;padding:4px 12px;border-radius:20px;margin-bottom:12px}
+/* ===== '더 보기' 링크 ===== */
+.more-link{display:inline-block;font-family:'Gowun Batang',serif;color:var(--accent);font-size:1rem;padding:9px 22px;border:1px solid var(--accent);border-radius:24px;transition:.2s}
+.more-link:hover{background:var(--accent);color:#fff}
 /* ===== 네이버지도 버튼 ===== */
 .naver-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 26px;background:var(--accent);color:#fff;border-radius:30px;font-size:.98rem;font-weight:700;transition:.2s;box-shadow:0 4px 14px rgba(92,21,32,.25)}
 .naver-btn:hover{background:var(--accent-deep);transform:translateY(-2px);box-shadow:0 6px 18px rgba(92,21,32,.32)}

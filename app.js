@@ -132,9 +132,33 @@ $('tourModal').onclick = (e)=>{ if(e.target===$('tourModal')) $('tourModal').cla
 // 다른 페이지에서 '둘러보기' 누르면 index.html#tour 로 오는데, 그때 자동으로 팝업 열기
 if(location.hash === '#tour'){ setTimeout(openTour, 300); }
 
-/* ---------- 오시는 길 지도 ---------- */
+/* ---------- 오시는 길 카카오 지도 ---------- */
 setText('addrLead', SITE.address);
-$('mapWrap').innerHTML = SITE.mapImage
-  ? `<img src="images/${SITE.mapImage}" alt="오시는 길 지도"
-       onerror="this.parentNode.innerHTML='<div class=\\'map-noimg\\'>지도 이미지 (준비 중)</div>'">`
-  : `<div class="map-noimg">지도 이미지 (준비 중)</div>`;
+(function(){
+  const wrap = $('mapWrap');
+  if(!wrap) return;
+  wrap.style.height = '400px';
+  wrap.innerHTML = '<div class="map-noimg">지도를 불러오는 중입니다…</div>';
+  function initKakao(){
+    if(!window.kakao || !kakao.maps) return false;
+    kakao.maps.load(function(){
+      wrap.innerHTML = '';
+      const map = new kakao.maps.Map(wrap, { center: new kakao.maps.LatLng(37.3422,127.9202), level: 3 });
+      map.addControl(new kakao.maps.ZoomControl(), kakao.maps.ControlPosition.RIGHT);
+      const geocoder = new kakao.maps.services.Geocoder();
+      geocoder.addressSearch('강원특별자치도 원주시 입춘로 45', function(r,s){
+        if(s === kakao.maps.services.Status.OK){
+          const c = new kakao.maps.LatLng(r[0].y, r[0].x);
+          map.setCenter(c);
+          const m = new kakao.maps.Marker({ map: map, position: c });
+          new kakao.maps.InfoWindow({ content: '<div style="padding:6px 10px;font-size:13px;white-space:nowrap">사유담심리상담연구소</div>' }).open(map, m);
+        }
+      });
+    });
+    return true;
+  }
+  if(!initKakao()){
+    let tries = 0;
+    const t = setInterval(function(){ tries++; if(initKakao() || tries > 50) clearInterval(t); }, 100);
+  }
+})();
