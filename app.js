@@ -143,17 +143,19 @@ setText('addrLead', SITE.address);
     if(!window.kakao || !kakao.maps) return false;
     kakao.maps.load(function(){
       wrap.innerHTML = '';
-      const map = new kakao.maps.Map(wrap, { center: new kakao.maps.LatLng(37.3422,127.9202), level: 3 });
+      let center = new kakao.maps.LatLng(37.3422,127.9202);
+      const map = new kakao.maps.Map(wrap, { center: center, level: 3 });
       map.addControl(new kakao.maps.ZoomControl(), kakao.maps.ControlPosition.RIGHT);
       const geocoder = new kakao.maps.services.Geocoder();
       geocoder.addressSearch('강원특별자치도 원주시 입춘로 45', function(r,s){
         if(s === kakao.maps.services.Status.OK){
-          const c = new kakao.maps.LatLng(r[0].y, r[0].x);
-          map.setCenter(c);
-          const m = new kakao.maps.Marker({ map: map, position: c });
+          center = new kakao.maps.LatLng(r[0].y, r[0].x);
+          map.setCenter(center);
+          const m = new kakao.maps.Marker({ map: map, position: center });
           new kakao.maps.InfoWindow({ content: '<div style="padding:6px 10px;font-size:13px;white-space:nowrap">사유담심리상담연구소</div>' }).open(map, m);
         }
       });
+      let rt; window.addEventListener('resize', function(){ clearTimeout(rt); rt = setTimeout(function(){ map.relayout(); map.setCenter(center); }, 200); });
     });
     return true;
   }
