@@ -44,7 +44,8 @@ section{padding:90px 0}
   box-shadow:0 10px 28px var(--shadow);
   opacity:0;visibility:hidden;transition:.2s;padding:8px 0;z-index:60;
 }
-.nav-group:hover .nav-drop{opacity:1;visibility:visible}
+.nav-group:hover .nav-drop,.nav-group.open>.nav-drop{opacity:1;visibility:visible}
+.nav-group.open>.nav-title{color:var(--accent)}
 .nav-drop a{display:block;padding:9px 20px;font-size:.9rem;color:var(--ink-soft);white-space:nowrap;text-align:center;transition:.15s}
 .nav-drop a:hover{background:var(--paper-deep);color:var(--accent)}
 

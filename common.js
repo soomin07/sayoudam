@@ -80,9 +80,26 @@ function renderHeader(){
       if(typeof openTour === 'function' && !IN_PAGES){ e.preventDefault(); openTour(); }
     });
   });
-  // 모바일 메뉴 클릭 시 닫기
+  // 카테고리 제목 탭(클릭)으로 펼치기 — 터치 기기(아이패드 등)에서 hover가 안 되는 문제 해결
+  host.querySelectorAll('.nav-group > .nav-title').forEach(title=>{
+    title.addEventListener('click', e=>{
+      const group = title.parentElement;
+      const isOpen = group.classList.contains('open');
+      host.querySelectorAll('.nav-group.open').forEach(g=> g.classList.remove('open'));
+      if(!isOpen) group.classList.add('open');
+      e.stopPropagation();
+    });
+  });
+  // 바깥을 탭하면 열린 메뉴 닫기
+  document.addEventListener('click', ()=>{
+    host.querySelectorAll('.nav-group.open').forEach(g=> g.classList.remove('open'));
+  });
+  // 하위 링크 클릭 시 메뉴 닫기
   host.querySelectorAll('.nav-drop a').forEach(a=>{
-    a.addEventListener('click', ()=> _('mainnav')?.classList.remove('open'));
+    a.addEventListener('click', ()=>{
+      _('mainnav')?.classList.remove('open');
+      host.querySelectorAll('.nav-group.open').forEach(g=> g.classList.remove('open'));
+    });
   });
   _('navToggle')?.addEventListener('click', ()=> _('mainnav')?.classList.toggle('open'));
 }
