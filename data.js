@@ -58,10 +58,12 @@ const SITE = {
         { label: '커플·부부상담', target: 'pages/program-couple.html' },
         { label: '청소년·부모상담', target: 'pages/program-youth.html' },
         { label: '가족상담', target: 'pages/program-family.html' },
+        { label: '기업·직장인 상담', target: 'pages/program-eap.html' },
         { label: '사진치료', target: 'pages/program-phototherapy.html' },
     ]},
     { title: '교육·집단 프로그램', items: [
         { label: '부모교육', target: 'pages/program-parent-edu.html' },
+        { label: '출강·강연', target: 'pages/program-lecture.html' },
         { label: '사진 집단상담', target: 'pages/program-photo-group.html' },
         { label: 'SP 교육·집단상담', target: 'pages/program-sp.html' },
     ]},
