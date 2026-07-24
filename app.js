@@ -152,7 +152,7 @@ setText('addrLead', SITE.address);
           center = new kakao.maps.LatLng(r[0].y, r[0].x);
           map.setCenter(center);
           const m = new kakao.maps.Marker({ map: map, position: center });
-          new kakao.maps.InfoWindow({ content: '<div style="padding:6px 10px;font-size:13px;white-space:nowrap">사유담심리상담연구소</div>' }).open(map, m);
+          new kakao.maps.InfoWindow({ content: '<div style="padding:6px 10px;font-size:13px;white-space:nowrap">사유담심리상담센터</div>' }).open(map, m);
         }
       });
       let rt; window.addEventListener('resize', function(){ clearTimeout(rt); rt = setTimeout(function(){ map.relayout(); map.setCenter(center); }, 200); });

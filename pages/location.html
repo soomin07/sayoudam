@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>오시는 길 · 사유담심리상담연구소</title>
+<title>오시는 길 · 사유담심리상담센터</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Gowun+Dodum&display=swap" rel="stylesheet">
@@ -63,7 +63,7 @@
         center = new kakao.maps.LatLng(result[0].y, result[0].x);
         map.setCenter(center);
         var marker = new kakao.maps.Marker({ map: map, position: center });
-        var iw = new kakao.maps.InfoWindow({ content: '<div style="padding:6px 10px;font-size:13px;white-space:nowrap;font-family:sans-serif">사유담심리상담연구소</div>' });
+        var iw = new kakao.maps.InfoWindow({ content: '<div style="padding:6px 10px;font-size:13px;white-space:nowrap;font-family:sans-serif">사유담심리상담센터</div>' });
         iw.open(map, marker);
       }
     });
