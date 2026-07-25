@@ -34,6 +34,7 @@ function resolveTarget(t){
   if(!t || t==='#') return '#';
   if(t==='apply') return SITE.applyForm;
   if(t==='blog')  return SITE.blogUrl;
+  if(t==='brunch')return SITE.brunchUrl;
   if(t==='tour')  return ROOT + 'index.html#tour'; // 둘러보기: 메인으로 가서 팝업
   if(t.startsWith('http')) return t;
   return ROOT + t; // pages/xxx.html 같은 내부 경로
@@ -63,7 +64,7 @@ function renderHeader(){
       <div class="nav-drop">
         ${(g.items||[]).map(it=>{
           const url = resolveTarget(it.target);
-          const ext = (it.target==='apply'||it.target==='blog'||(it.target||'').startsWith('http'))
+          const ext = (it.target==='apply'||it.target==='blog'||it.target==='brunch'||(it.target||'').startsWith('http'))
             ? ' target="_blank" rel="noopener"' : '';
           return `<a href="${url}" data-target="${it.target||''}"${ext}>${it.label}</a>`;
         }).join('')}
@@ -140,13 +141,16 @@ function renderFooter(){
   const hoursHtml = SITE.hours.map(h=>
     `<div class="cb-row"><span>${h.day}</span><span>${h.time}</span></div>`).join('');
 
+  /* 채널 버튼 — mark 는 서비스를 알아보게 하는 글자 표시 (N=네이버, B=브런치) */
   const sns = [
-    {url:SITE.instagramUrl, label:'인스타'},
-    {url:SITE.blogUrl, label:'블로그'},
-    {url:SITE.youtubeUrl, label:'유튜브'},
+    {url:SITE.blogUrl,      label:'네이버 블로그', mark:'N',  cls:'sns-naver'},
+    {url:SITE.brunchUrl,    label:'브런치',       mark:'B',  cls:'sns-brunch'},
+    {url:SITE.instagramUrl, label:'인스타그램',   mark:'◉',  cls:''},
+    {url:SITE.youtubeUrl,   label:'유튜브',       mark:'▶',  cls:''},
   ].filter(s=>s.url);
   const snsHtml = sns.map(s=>
-    `<a class="sns-btn" href="${s.url}" target="_blank" rel="noopener">${s.label}</a>`).join('');
+    `<a class="sns-btn ${s.cls}" href="${s.url}" target="_blank" rel="noopener">`
+    + `<span class="sns-mark">${s.mark}</span>${s.label}</a>`).join('');
 
   host.innerHTML = `
     <div class="contact-bar" id="contact">

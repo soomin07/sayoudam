@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Gowun+Dodum&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="../style.css?v=3">
 </head>
 <body>
 
@@ -41,8 +41,8 @@
 
 <div id="siteFooter"></div>
 
-<script src="../data.js"></script>
-<script src="../common.js"></script>
+<script src="../data.js?v=3"></script>
+<script src="../common.js?v=3"></script>
 <script>
 (function(){
   var c = SITE.counselor;
@@ -83,8 +83,8 @@
       + '<div>'
         + '<div class="counselor-name">'+esc(m.name)+'</div>'
         + (m.role ? '<div class="counselor-role">'+esc(m.role)+'</div>' : '')
-        + (m.affil && m.affil.length ? '<div class="assoc-affil">'+m.affil.map(esc).join('<br>')+'</div>' : '')
         + (m.note ? '<blockquote class="counselor-phil">'+esc(m.note)+'</blockquote>' : '')
+        + (m.affil && m.affil.length ? '<div class="assoc-affil">'+m.affil.map(esc).join('<br>')+'</div>' : '')
         + (career ? '<div class="prof-wrap">'+career+'</div>' : '')
       + '</div>'
     + '</div>';

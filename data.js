@@ -23,7 +23,8 @@ const SITE = {
 
   /* ---------- 링크 ---------- */
   applyForm: 'https://form.naver.com/response/C8w4QvU-AZjW6tp7cMgtcQ', // 예약(상담신청)
-  blogUrl: 'https://blog.naver.com/sayoudam',
+  blogUrl: 'https://blog.naver.com/sayoudam',          // 네이버 블로그
+  brunchUrl: 'https://brunch.co.kr/@sayoudam',         // 브런치
   instagramUrl: '',      // 인스타 주소
   youtubeUrl: '',        // 유튜브 주소
 
@@ -70,7 +71,8 @@ const SITE = {
     { title: '센터소식', items: [
         { label: '공지사항', target: 'pages/notice.html' },
         { label: '자주묻는질문', target: 'pages/faq.html' },
-        { label: '블로그', target: 'blog' },
+        { label: '네이버 블로그', target: 'blog' },
+        { label: '브런치', target: 'brunch' },
     ]},
     /* cta:true 를 붙이면 펼쳐지는 메뉴가 아니라, 오른쪽에 떨어져 있는
        '버튼'으로 표시되고 누르면 바로 그 페이지로 이동합니다. */
@@ -136,9 +138,19 @@ const SITE = {
     ],
     // 더보기(토글) 안에 접어두는 상세 이력
     more: [
-      { group: '활동', items: [
-          '사진과 심리의 통합적 접근으로 상담 진행 (사진치료)',
-          '사진으로 개인 및 집단상담 진행',
+      { group: '강의', items: [
+          '가족상담 / 성인학습 및 상담 / 심리측정 및 평가 — 상지대학교',
+          '사진치료의 실제 — 한국가족놀이치료학회 2026 하계 워크숍',
+          '내 아이를 이해하는 부모교육 — 원주시장애인복지센터',
+          'TCI를 활용한 부모교육 / 사진을 활용한 또래 상담자 교육 등 — 학교 및 기관',
+          '그 외 다수',
+      ]},
+      { group: '집단상담', items: [
+          '대학생을 위한 진로집단상담 — 상지대학교',
+          '또래상담자를 위한 사진치료 집단상담 — 육민관고등학교',
+          '사진으로 치유하는 여행 — 하소아동복지관 (부모 대상)',
+          '부부관계 향상 집단상담 — 원주시가족센터',
+          '그 외 다수',
       ]},
       { group: '학술 활동', items: [
           '한국심리학회 정회원',
@@ -183,6 +195,7 @@ const SITE = {
         ],
         note: '신체감각을 활용한 트라우마 치유(소매틱)를 중심으로, 사유담의 사례 수퍼비전과 교육에 함께합니다.',
         education: [
+          '교육학 박사 수료, 상지대학교',
           '심리학 석사 (상담 전공), 이화여자대학교',
         ],
         licenses: [

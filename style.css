@@ -185,9 +185,17 @@ section{padding:90px 0}
 .cb-block .big{font-size:1.4rem;font-family:'Gowun Batang',serif;color:#fff;margin-bottom:6px}
 .cb-row{display:flex;justify-content:space-between;max-width:240px;padding:5px 0;color:#cbc6ba;font-size:.95rem}
 .cb-hours-note{margin-bottom:12px;color:#cbc6ba;font-size:.85rem;line-height:1.6}
-.sns-links{display:flex;gap:16px}
-.sns-btn{width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:.75rem;color:#e6e1d6;transition:.25s;text-align:center;line-height:1.2}
-.sns-btn:hover{background:var(--accent);color:#fff;transform:translateY(-3px)}
+/* 채널 버튼 — 서비스 마크(N·B) + 이름 */
+.sns-links{display:flex;flex-wrap:wrap;gap:10px}
+.sns-btn{display:inline-flex;align-items:center;gap:9px;padding:10px 16px 10px 12px;border-radius:24px;
+  background:rgba(255,255,255,.1);color:#e6e1d6;font-size:.85rem;line-height:1;white-space:nowrap;transition:.25s}
+.sns-btn:hover{background:var(--accent);color:#fff;transform:translateY(-2px)}
+.sns-mark{width:21px;height:21px;border-radius:6px;flex:0 0 auto;
+  display:flex;align-items:center;justify-content:center;
+  font-family:Arial,sans-serif;font-weight:800;font-size:.78rem;
+  background:rgba(255,255,255,.18);color:#f6f1e8}
+.sns-naver .sns-mark{background:#03C75A;color:#fff}
+.sns-brunch .sns-mark{background:#f6f1e8;color:#1a1a1a}
 
 /* ===== 푸터 ===== */
 footer{background:var(--darker);color:#a99a97;padding:40px 0;font-size:.85rem}
@@ -221,10 +229,10 @@ footer{background:var(--darker);color:#a99a97;padding:40px 0;font-size:.85rem}
   }
   .nav-group.open>.nav-title{color:var(--accent)}
   .nav-group.open>.nav-title::after{transform:translateY(-25%) rotate(-135deg);border-color:var(--accent)}
-  /* 여백은 항상 켜두고(border-box라 접혔을 땐 안 보임) 높이만 움직여
-     여백이 툭 튀는 현상을 없앰. 실제 높이는 common.js가 재서 넣어줌 */
+  /* 여백을 두면 접었을 때도 그만큼 띠가 남으므로 여백은 0으로 두고,
+     항목(a)의 자체 여백만 사용합니다. 실제 높이는 common.js가 재서 넣어줌 */
   .nav-drop{position:static;transform:none;opacity:1;visibility:visible;box-shadow:none;border:0;
-    background:var(--paper-deep);max-height:0;overflow:hidden;padding:4px 0 8px;
+    background:var(--paper-deep);max-height:0;overflow:hidden;padding:0;
     transition:max-height .34s cubic-bezier(.32,.72,.28,1)}
   .nav-group.open>.nav-drop{max-height:420px}
   .nav-drop a{text-align:left;padding:11px 20px 11px 26px;border-bottom:1px solid rgba(226,213,189,.4)}
@@ -387,8 +395,8 @@ footer{background:var(--darker);color:#a99a97;padding:40px 0;font-size:.85rem}
 .assoc-team .ct-lead{color:var(--ink-soft);font-size:.95rem;margin-bottom:8px}
 .assoc-profile{margin-top:32px!important;margin-bottom:48px}
 .assoc-profile:last-child{margin-bottom:0}
-/* 소속 기관 — 이름 바로 아래 */
-.assoc-affil{margin-top:10px;color:var(--ink-soft);font-size:.92rem;line-height:1.8}
+/* 소속 기관 — 소개 문구 아래, 굵게 */
+.assoc-affil{margin-top:14px;color:var(--ink);font-size:.94rem;line-height:1.9;font-weight:700}
 /* ===== '더 보기' 링크 ===== */
 .more-link{display:inline-block;font-family:'Gowun Batang',serif;color:var(--accent);font-size:1rem;padding:9px 22px;border:1px solid var(--accent);border-radius:24px;transition:.2s}
 .more-link:hover{background:var(--accent);color:#fff}
