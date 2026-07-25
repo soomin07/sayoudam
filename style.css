@@ -206,20 +206,36 @@ footer{background:var(--darker);color:#a99a97;padding:40px 0;font-size:.85rem}
   .section-title{font-size:1.5rem}
   section{padding:60px 0}
   .hero-slider{height:56vh}
-  /* 모바일 네비: 토글로 열기 */
+  /* 모바일 네비: 토글로 열기 — 카테고리는 접혀 있다가 누르면 펼쳐짐(아코디언) */
   .nav-toggle{display:block}
   .mainnav{display:none;border-top:1px solid var(--line)}
-  .mainnav.open{display:block}
+  .mainnav.open{display:block;padding-bottom:4px}
   .mainnav-inner{flex-direction:column;gap:0}
-  .nav-group>.nav-title{padding:14px 8px;border-bottom:1px dashed var(--line)}
-  .nav-drop{position:static;transform:none;opacity:1;visibility:visible;box-shadow:none;border:0;padding:0 0 8px;background:var(--paper-deep)}
-  .nav-drop a{text-align:left;padding-left:24px}
-  /* 모바일: 갤러리 버튼은 목록 아래 가로 전체로 */
-  /* 모바일: 다른 카테고리와 같은 줄 형식으로 */
-  .nav-cta{margin:0;padding:14px 8px;justify-content:flex-start;
-    border-bottom:1px dashed var(--line);width:100%}
-  .nav-cta::before{inset:4px 0}
-  .nav-cta .nc-arw{opacity:.6;right:10px;transform:translate(0,-50%)}
+  .nav-group{width:100%}
+  .nav-group>.nav-title{position:relative;padding:15px 34px 15px 10px;border-bottom:1px solid rgba(226,213,189,.75)}
+  /* 접힘/펼침 화살표 */
+  .nav-group>.nav-title::after{
+    content:"";position:absolute;right:14px;top:50%;width:7px;height:7px;
+    border-right:1.5px solid var(--warm);border-bottom:1.5px solid var(--warm);
+    transform:translateY(-70%) rotate(45deg);transition:transform .3s ease;
+  }
+  .nav-group.open>.nav-title{color:var(--accent)}
+  .nav-group.open>.nav-title::after{transform:translateY(-25%) rotate(-135deg);border-color:var(--accent)}
+  .nav-drop{position:static;transform:none;opacity:1;visibility:visible;box-shadow:none;border:0;
+    background:var(--paper-deep);max-height:0;overflow:hidden;padding:0;
+    transition:max-height .35s ease}
+  .nav-group.open>.nav-drop{max-height:420px;padding:4px 0 8px}
+  .nav-drop a{text-align:left;padding:11px 20px 11px 26px;border-bottom:1px solid rgba(226,213,189,.4)}
+  .nav-drop a:last-child{border-bottom:0}
+  /* 모바일: 갤러리는 목록 맨 아래, 와인색 버튼으로 또렷하게 */
+  .nav-cta{margin:14px 10px 12px;padding:15px;width:auto;justify-content:center;
+    background:var(--accent);color:var(--paper);border-radius:8px}
+  .nav-cta::before{display:none}
+  .nav-cta .nc-txt{color:var(--paper)}
+  .nav-cta .nc-arw{position:static;transform:none;opacity:1;color:var(--paper);
+    margin-left:10px;font-size:.85rem}
+  .nav-cta:hover{color:var(--paper)}
+  .nav-cta:hover .nc-txt{transform:none}
 }
 @media(max-width:520px){
   body{zoom:1}
