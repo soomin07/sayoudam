@@ -4,134 +4,571 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>사진 갤러리 · 사유담심리상담센터</title>
-<meta name="description" content="사유담 사진 갤러리. 전시 사진 감상 및 세트 구매 문의.">
+<meta name="description" content="사유담 온라인 사진 전시. 작품 감상 및 세트·낱장 구매 문의.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Gowun+Dodum&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../style.css">
+<style>
+/* ============================================================
+   사유담 갤러리 — 온라인 전시장
+   이 페이지는 사이트와 구별된 '전시 공간' 테마를 사용합니다.
+   내용(전시 제목·서문·사진 장수 등)은 data.js 의 gallery 에서 관리됩니다.
+   ============================================================ */
+/* 두 개의 전시 공간이 스크롤에 따라 자연스럽게 섞입니다.
+   위쪽(Q-set)은 낮의 미술관 벽, 아래쪽(낱장)은 밤의 전시장.
+   --t 값(0=낮, 1=밤)이 스크롤에 따라 변하며 모든 색이 함께 이동합니다. */
+:root{
+  --t:0;
+  --wine:#7d1f2c;       /* 사유담 로고 와인색 */
+  --wine-deep:#5c1520;
+  --gold:#8c7a52;       /* 금빛 포인트 (낮) */
+  --ivory:#26251f;      /* 글자 (낮) */
+  --ivory-soft:#6f6d66;
+  --line:rgba(0,0,0,.13);
+  --mat:#ffffff;        /* 액자 매트 */
+  --frame-line:rgba(0,0,0,.15);
+  --frame-sh:0 16px 38px rgba(40,38,34,.2);
+  --gold-line:rgba(140,122,82,.45);
+  --gold-tint:rgba(140,122,82,.09);
+  --img-filter:saturate(1) brightness(1);
+}
+/* 밤 구간(낱장)에 들어서면 색이 이쪽으로 이동 */
+body.night{
+  --gold:#bf929a; --ivory:#e4d6d5; --ivory-soft:#998684;
+  --line:rgba(228,214,213,.11); --mat:#0b0707;
+  --frame-line:rgba(191,146,154,.2);
+  --frame-sh:0 20px 46px rgba(0,0,0,.62);
+  --gold-line:rgba(191,146,154,.38);
+  --gold-tint:rgba(191,146,154,.07);
+  --img-filter:saturate(.95) brightness(.9);
+}
+body{transition:color .9s ease}
+.gbar,.frame,.frame img,.cap,.buy-btn,.gchip,.vbtn,.intro,.soon .box{
+  transition:color .9s ease,background-color .9s ease,border-color .9s ease,box-shadow .9s ease,filter .9s ease}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;background:#e2e1dd}
+body{color:var(--ivory);font-family:'Gowun Dodum',sans-serif;line-height:1.8;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;word-break:keep-all}
+/* 두 공간의 벽: 아래 레이어는 낮, 위 레이어(밤)가 --t 만큼 덮어옴 */
+#roomGlow{position:fixed;inset:0;z-index:0;pointer-events:none;transition:opacity .9s ease;
+  background:linear-gradient(180deg,#e4e3df 0%,#d9d8d3 100%)}
+#roomGlow::after{content:"";position:absolute;inset:0;opacity:var(--t);transition:opacity 1s ease;
+  background:radial-gradient(120% 80% at 50% -20%,#2a1b1a 0%,#181010 42%,#0d0909 100%)}
+.serif{font-family:'Gowun Batang',serif}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+
+
+/* ── 입장 전환: 사이트에서 이미 어두워진 채로 도착하므로,
+      어둠 속에서 온기와 제목이 조용히 떠오름 ── */
+/* 밝은 전시장 톤. 글자가 천천히 또렷해졌다가, 다시 천천히 흐려지며 걷힘 */
+#veil{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;padding:20px;
+  background-color:#e2e1dd}
+/* 아래에서 부드럽게 떠오르며 또렷해짐 */
+#veil .inner{position:relative;opacity:0;transform:translateY(26px);
+  animation:riseIn 1.15s cubic-bezier(.22,.68,.28,1) .08s forwards;
+  transition:opacity .9s ease,transform .9s ease}
+#veil .ey{font-size:.72rem;letter-spacing:.5em;color:#8c7a52;text-transform:uppercase}
+#veil h1{font-size:clamp(1.7rem,5vw,2.4rem);color:#26251f;margin:18px 0 14px}
+#veil .ln{width:70px;height:1px;background:#8c7a52;margin:0 auto}
+#veil .hint{font-size:.8rem;color:#6f6d66;margin-top:22px}
+/* 걷힐 때: 글자가 먼저 천천히 흐려지고, 이어서 화면이 열림 */
+#veil.leave{animation:veilOut 1.2s ease forwards}
+#veil.leave .inner{opacity:0;transform:translateY(-14px)}
+#veil.skip{display:none}
+@keyframes riseIn{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes veilOut{0%{opacity:1}52%{opacity:1}100%{opacity:0;visibility:hidden}}
+
+/* ── 상단 바 (배경도 낮/밤을 따라 바뀜) ── */
+.gbar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:14px;
+  padding:16px 40px;backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+  background:rgba(228,227,223,.86)}
+.gbar::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:var(--t);
+  background:rgba(16,11,11,.9)}
+.gbar > *{position:relative;z-index:1}
+.gbar .b{display:flex;align-items:baseline;gap:12px;min-width:0}
+.gbar .b .n{font-family:'Gowun Batang',serif;font-size:1.15rem;letter-spacing:.02em;white-space:nowrap}
+.gbar .b .s{font-size:.66rem;letter-spacing:.34em;color:var(--gold);text-transform:uppercase}
+.gbar a.back{margin-left:auto;color:var(--ivory-soft);font-size:.85rem;transition:color .25s;white-space:nowrap}
+.gbar a.back:hover{color:var(--ivory)}
+/* 보기 방식 전환 버튼 */
+.vmode{display:flex;gap:6px;margin-left:16px}
+.vbtn{display:flex;align-items:center;gap:7px;background:none;border:1px solid transparent;color:var(--ivory-soft);
+  font-size:.78rem;letter-spacing:.05em;padding:7px 12px;border-radius:2px;cursor:pointer;
+  transition:color .3s,border-color .3s,background .3s}
+.vbtn svg{width:30px;height:30px;display:block}
+.vbtn:hover{color:var(--ivory)}
+.vbtn.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-tint)}
+
+/* ── 갤러리 소개 (전체 안내 + 카테고리 바로가기) ── */
+.ghead{position:relative;z-index:1;max-width:820px;margin:0 auto;padding:84px 40px 6px;text-align:center}
+.ghead .ey{font-size:.72rem;letter-spacing:.5em;color:var(--gold);text-transform:uppercase;margin-bottom:22px}
+.ghead h1{font-family:'Gowun Batang',serif;font-size:clamp(1.9rem,4.6vw,2.7rem);line-height:1.35;margin-bottom:24px}
+.ghead .ln{width:54px;height:1px;background:var(--gold);margin:0 auto 24px}
+.ghead p{color:var(--ivory-soft);font-size:1.02rem}
+/* 분류 전환 탭 — 지금 보고 있는 분류가 또렷하게 강조됨 */
+.gchips{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:30px}
+.gchip{position:relative;border:1px solid var(--gold-line);color:var(--ivory-soft);
+  font-size:.92rem;letter-spacing:.04em;padding:11px 30px;border-radius:24px;cursor:pointer;
+  background:transparent;font-family:inherit;
+  transition:color .35s ease,background-color .35s ease,border-color .35s ease,box-shadow .35s ease,transform .35s ease}
+.gchip:hover{color:var(--wine);border-color:rgba(125,31,44,.45);background:rgba(125,31,44,.06)}
+.gchip.on{color:#fdf8f1;background:var(--wine);border-color:var(--wine);
+  box-shadow:0 6px 20px rgba(125,31,44,.2);transform:translateY(-1px)}
+.gchip.on:hover{background:var(--wine-deep);border-color:var(--wine-deep);color:#fdf8f1}
+
+/* ── 전시 섹션 ── */
+.ex{position:relative;z-index:1}
+/* 한 번에 한 분류만 보여줌 */
+.ex section{display:none}
+.ex section.on{display:block;animation:secIn .7s ease}
+@keyframes secIn{from{opacity:0}to{opacity:1}}
+/* 분류(카테고리) 머리: 왼쪽에 작게 */
+.intro{max-width:1240px;margin:0 auto;padding:56px 40px 4px}
+.cat-row{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;
+  border-bottom:1px solid var(--line);padding-bottom:14px}
+.cat-l{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;min-width:0}
+.intro h2{font-family:'Gowun Batang',serif;font-size:1.5rem;line-height:1.3;letter-spacing:.02em}
+.cat-meta{font-size:.82rem;letter-spacing:.04em;color:var(--ivory-soft)}
+.cat-meta .bd{color:var(--gold)}
+.cat-note{margin-top:12px;font-size:.86rem;color:var(--ivory-soft)}
+.buy-btn{display:inline-block;padding:9px 22px;border:1px solid var(--gold-line);color:var(--gold);
+  font-size:.82rem;letter-spacing:.06em;border-radius:2px;white-space:nowrap}
+.buy-btn:hover{background:var(--gold-tint);border-color:var(--gold)}
+
+/* ── 전시 벽 (벽돌쌓기: 작품이 자기 높이만큼만 차지해 빈 공백이 없음) ── */
+.wall{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:40px 40px 96px;
+  display:grid;grid-template-columns:repeat(2,1fr);grid-auto-rows:10px;column-gap:64px}
+/* 시야에 들어올 때 떠오름. 스크롤 방향에 따라 등장 방향이 뒤집힘
+   (내려갈 땐 아래에서 위로, 올라갈 땐 위에서 아래로) */
+.piece{position:relative;cursor:pointer;opacity:0;transform:translateY(20px);transition:opacity .8s ease,transform .8s ease}
+.piece.from-above{transform:translateY(-20px)}
+.piece.no-anim{transition:none}
+.piece.in{opacity:1;transform:none}
+.frame{position:relative;background:var(--mat);padding:10px;border:1px solid var(--frame-line);
+  box-shadow:var(--frame-sh);
+  transition:transform .5s cubic-bezier(.2,.7,.2,1),box-shadow .9s ease,background-color .9s ease,border-color .9s ease}
+.frame img{display:block;width:100%;height:auto;filter:var(--img-filter);transition:filter .9s ease}
+.piece:hover .frame{transform:translateY(-8px)}
+body:not(.night) .piece:hover .frame{box-shadow:0 26px 54px rgba(40,38,34,.28)}
+body.night .piece:hover .frame{box-shadow:0 30px 66px rgba(0,0,0,.7),0 0 44px rgba(191,146,154,.12)}
+body:not(.night) .piece:hover .frame img{filter:saturate(1.03) brightness(1.03)}
+body.night .piece:hover .frame img{filter:saturate(1.06) brightness(1.1)}
+.cap{display:flex;align-items:baseline;gap:12px;margin-top:16px;transition:opacity .5s}
+.cap .no{font-family:'Gowun Batang',serif;color:var(--gold);font-size:.92rem;letter-spacing:.06em}
+.cap .ti{color:var(--ivory-soft);font-size:.92rem;transition:color .3s}
+.piece:hover .cap .ti{color:var(--ivory)}
+/* 벽돌쌓기에서는 세로 간격을 span 계산에 포함 (JS) — 첫 줄만 살짝 어긋나게 */
+.wall .piece:nth-child(2){margin-top:46px}
+/* 방이 어두워지고, 바라보는 작품에만 조명이 모임 (전시 보기 + 마우스 환경에서만)
+   ─ 잔상 버그 방지를 위해 투명도 대신 사진 밝기를 낮추는 방식 사용 */
+@media(hover:hover) and (pointer:fine){
+  /* 밤 구간에서만: 나머지 작품의 조명이 잦아듦 */
+  body.night:not(.browse) .wall:hover .piece.in .frame img{filter:saturate(.88) brightness(.6)}
+  body.night:not(.browse) .wall:hover .piece.in .cap{opacity:.5}
+  body.night:not(.browse) .wall .piece.in:hover .frame img{filter:saturate(1.06) brightness(1.1)}
+  body.night:not(.browse) .wall .piece.in:hover .cap{opacity:1}
+  /* 낮 구간: 밝은 공간에 맞게 아주 절제된 강조만 */
+  body:not(.night):not(.browse) .wall:hover .piece.in .cap{opacity:.55}
+  body:not(.night):not(.browse) .wall .piece.in:hover .cap{opacity:1}
+}
+
+/* ── 모아 보기: 정사각 격자, 연출은 조용히 물러남 ── */
+body.browse .wall{grid-template-columns:repeat(4,1fr);grid-auto-rows:auto;column-gap:22px;row-gap:28px;padding-top:16px}
+body.browse .wall .piece:nth-child(2){margin-top:0}
+body.browse .piece{opacity:1;transform:none}
+body.browse .frame{padding:7px}
+body.browse .frame img{aspect-ratio:1/1;object-fit:cover;filter:saturate(1) brightness(1)}
+body.browse .cap{margin-top:9px;gap:8px}
+body.browse .cap .no{font-size:.8rem}
+body.browse .cap .ti{display:none}
+body.browse .piece:hover .frame{transform:none;box-shadow:0 18px 40px rgba(0,0,0,.5),0 0 30px rgba(214,180,120,.1)}
+body.browse .piece:hover .frame img{filter:saturate(1.02) brightness(1.06)}
+
+/* ── 아직 사진이 없는 분류: 빈 액자를 걸어둠 ── */
+.piece.empty{cursor:default}
+.piece.empty .frame{box-shadow:none;background:transparent;border-style:dashed;border-color:var(--gold-line)}
+.piece.empty .ph{aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;
+  background:var(--gold-tint);transition:background-color .9s ease}
+.piece.empty .ph span{font-size:.78rem;letter-spacing:.24em;color:var(--ivory-soft);opacity:.6}
+.piece.empty:hover .frame{transform:none;box-shadow:none}
+.wall-empty .piece:nth-child(2){margin-top:0}
+body.browse .piece.empty .ph{aspect-ratio:1/1}
+
+/* ── 준비 중인 전시 ── */
+.soon{max-width:1240px;margin:0 auto;padding:34px 40px 96px;text-align:center;position:relative;z-index:1}
+.soon .box{border:1px solid var(--gold-line);padding:52px 30px;background:var(--gold-tint)}
+.soon .t{font-family:'Gowun Batang',serif;color:var(--gold);font-size:1.05rem;letter-spacing:.1em;margin-bottom:12px}
+.soon p{color:var(--ivory-soft);font-size:.92rem}
+
+/* ── 몰입 감상 (라이트박스) ── */
+#lb{position:fixed;inset:0;z-index:90;background:rgba(8,6,5,.96);display:none;align-items:center;justify-content:center;flex-direction:column}
+#lb.on{display:flex;animation:lbIn .4s ease}
+@keyframes lbIn{from{opacity:0}to{opacity:1}}
+#lb::before{content:"";position:absolute;width:92vw;height:92vh;top:48%;left:50%;transform:translate(-50%,-50%);
+  pointer-events:none;background:radial-gradient(circle at 50% 42%,rgba(240,216,164,.12),rgba(0,0,0,0) 58%)}
+#lb img{position:relative;max-width:86vw;max-height:72vh;box-shadow:0 30px 80px rgba(0,0,0,.7)}
+#lb .lcap{position:relative;margin-top:20px;text-align:center}
+#lb .lcap .no{font-family:'Gowun Batang',serif;color:#c2a878;letter-spacing:.08em}
+#lb .lcap .ti{color:#a99f8d;font-size:.9rem;margin-top:2px}
+#lb .lbuy{display:inline-block;margin-top:14px;padding:9px 26px;border:1px solid rgba(194,168,120,.55);color:#c2a878;
+  font-size:.82rem;letter-spacing:.08em;border-radius:2px;transition:background .3s,color .3s}
+#lb .lbuy:hover{background:rgba(194,168,120,.12);color:#e8d9bc}
+#lb .x{position:absolute;top:22px;right:30px;z-index:2;color:#a99f8d;font-size:1.6rem;cursor:pointer;transition:color .25s;background:none;border:0}
+#lb .x:hover{color:#ece3d4}
+#lb .nav{position:absolute;top:50%;transform:translateY(-50%);z-index:2;background:none;border:0;color:#a99f8d;
+  font-size:2.4rem;cursor:pointer;padding:20px;transition:color .25s;font-family:'Gowun Batang',serif}
+#lb .nav:hover{color:#ece3d4}
+#lb .prev{left:14px}#lb .next{right:14px}
+#lb .count{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);font-size:.78rem;letter-spacing:.3em;color:#a99f8d;white-space:nowrap}
+
+/* ── 하단 ── */
+.gfoot{position:relative;z-index:1;border-top:1px solid var(--line);padding:34px 40px 44px;text-align:center;
+  transition:color .9s ease,border-color .9s ease}
+.gfoot .nm{font-family:'Gowun Batang',serif;font-size:.95rem;letter-spacing:.06em;margin-bottom:6px}
+.gfoot p{color:var(--ivory-soft);font-size:.82rem}
+.gfoot a.site{display:inline-block;margin-top:14px;color:var(--gold);font-size:.85rem;border-bottom:1px solid var(--gold-line);padding-bottom:2px}
+
+@media(max-width:820px){
+  .wall{grid-template-columns:1fr;padding:20px 22px 84px}
+  .wall .piece:nth-child(2){margin-top:0}
+  body.browse .wall{grid-template-columns:repeat(2,1fr);column-gap:14px;row-gap:20px}
+  .intro{padding:64px 24px 40px}
+  .ghead{padding:60px 24px 4px}
+  .gbar{padding:12px 16px;flex-wrap:wrap}
+  .vbtn .lbl{display:none}
+  .vbtn{padding:8px 10px}
+  #lb .nav{font-size:1.9rem;padding:14px}
+  #lb img{max-width:92vw}
+  .gfoot{padding:28px 22px 38px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  #veil{display:none}
+  .piece{opacity:1;transform:none}
+}
+</style>
 </head>
 <body>
 
-<div id="siteHeader"></div>
+<div id="roomGlow"></div>
 
-<div class="page-hero">
-  <div class="wrap">
-    <div class="eyebrow">Gallery</div>
-    <h1>사진 갤러리</h1>
-    <p>사유담이 담아온 사진을 감상하고, 마음에 드는 작품은 세트 단위로 구매를 문의하실 수 있습니다.</p>
+<div id="veil">
+  <div class="inner">
+    <div class="ey">Sayoudam Gallery</div>
+    <h1 class="serif">사유담 사진 갤러리</h1>
+    <div class="ln"></div>
   </div>
 </div>
 
-<div class="gallery-body">
-  <div class="wrap">
-    <p class="gallery-intro">사진은 전시용이며, 결제는 문의를 통해 안내해 드립니다. 원하시는 세트를 알려주세요.</p>
-    <div id="gallerySets"></div>
-    <a class="back-home" href="../index.html">← 홈으로 돌아가기</a>
+<div class="gbar">
+  <div class="b"><span class="n serif">사유담</span><span class="s">Gallery</span></div>
+  <div class="vmode" role="group" aria-label="보기 방식">
+    <button class="vbtn on" id="vmExhibit" aria-pressed="true" title="전시 보기">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" aria-hidden="true">
+        <rect x="2.5" y="4" width="8.4" height="16"/><rect x="13.1" y="4" width="8.4" height="10.4"/>
+      </svg>
+      <span class="lbl">전시 보기</span>
+    </button>
+    <button class="vbtn" id="vmBrowse" aria-pressed="false" title="모아 보기">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" aria-hidden="true">
+        <rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="8"/>
+        <rect x="3" y="13" width="8" height="8"/><rect x="13" y="13" width="8" height="8"/>
+      </svg>
+      <span class="lbl">모아 보기</span>
+    </button>
   </div>
+  <a class="back" href="../index.html">← 사이트로 돌아가기</a>
 </div>
 
-<!-- 라이트박스 (크게 보기) -->
-<div class="lb" id="lb">
-  <div class="lb-head"><button class="lb-close" id="lbClose" aria-label="닫기">×</button></div>
-  <div class="lb-view">
-    <button class="lb-arrow lb-prev" id="lbPrev" aria-label="이전">‹</button>
-    <img id="lbImg" src="" alt="사진">
-    <button class="lb-arrow lb-next" id="lbNext" aria-label="다음">›</button>
+<main id="exhibits" class="ex"></main>
+
+<div id="lb" role="dialog" aria-modal="true" aria-label="작품 크게 보기">
+  <button class="x" id="lbClose" aria-label="닫기">✕</button>
+  <button class="nav prev" id="lbPrev" aria-label="이전 작품">‹</button>
+  <img id="lbImg" src="" alt="">
+  <div class="lcap">
+    <div class="no" id="lbNo"></div>
+    <div class="ti" id="lbTi"></div>
+    <a class="lbuy" id="lbBuy" href="#" target="_blank" rel="noopener">구매 문의</a>
   </div>
-  <div class="lb-foot">
-    <div class="lb-count" id="lbCount"></div>
-    <a class="lb-buy" id="lbBuy" href="#" target="_blank" rel="noopener">이 세트 구매 문의</a>
-  </div>
+  <button class="nav next" id="lbNext" aria-label="다음 작품">›</button>
+  <div class="count" id="lbCount"></div>
 </div>
 
-<div id="siteFooter"></div>
+<div class="gfoot">
+  <div class="nm serif" id="footName"></div>
+  <p id="footInfo"></p>
+  <a class="site" href="../index.html">사유담 사이트로 돌아가기</a>
+</div>
 
 <script src="../data.js"></script>
-<script src="../common.js"></script>
 <script>
 (function(){
-  var g = (SITE.gallery) || {};
-  var buyForm = g.buyForm || SITE.applyForm || '#';
+  'use strict';
+  /* data.js는 const SITE 로 선언돼 window에 붙지 않으므로 이름으로 직접 참조 */
+  var S = (typeof SITE !== 'undefined' && SITE) ? SITE : {};
+  var g = S.gallery || {};
+  var buyForm = g.buyForm || S.applyForm || '#';
   var sets = g.sets || [];
-  var host = document.getElementById('gallerySets');
+  var host = document.getElementById('exhibits');
+
+  /* ── 하단 정보 ── */
+  document.getElementById('footName').textContent = S.centerName || '사유담';
+  document.getElementById('footInfo').textContent = '작품 구매 문의 ' + (S.phone || '');
 
   function pad(n){ return (n<10?'0':'') + n; }
   function fileFor(set, i){ return '../' + set.folder + '/photo' + pad(i+1) + '.' + (set.ext||'jpg'); }
+  function esc(s){ var d=document.createElement('div'); d.textContent=s||''; return d.innerHTML; }
 
-  // 라이트박스는 세트 하나 안에서만 이동
-  var lb = document.getElementById('lb');
-  var lbImg = document.getElementById('lbImg');
-  var lbCount = document.getElementById('lbCount');
-  var lbBuy = document.getElementById('lbBuy');
+  /* ── 입장 전환: 갤러리에 들어올 때마다 재생 ── */
+  var veil = document.getElementById('veil');
+  /* 클릭 없이 자동으로 넘어감 (전체 약 3.2초) */
+  setTimeout(leave, 1400);
+  veil.addEventListener('animationend', function(e){ if(e.animationName==='veilOut') veil.classList.add('skip'); });
+  function leave(){ veil.classList.add('leave'); }
+
+  /* ── 라이트박스 ── */
+  var lb = document.getElementById('lb'), lbImg = document.getElementById('lbImg'),
+      lbNo = document.getElementById('lbNo'), lbTi = document.getElementById('lbTi'),
+      lbCount = document.getElementById('lbCount'), lbBuy = document.getElementById('lbBuy');
   var curSet = null, cur = 0;
 
-  function openLb(set, i){ curSet = set; cur = i; showLb(); lb.classList.add('on'); document.body.style.overflow='hidden'; }
+  function openLb(set, i){ curSet=set; cur=i; renderLb(); lb.classList.add('on'); document.body.style.overflow='hidden'; }
   function closeLb(){ lb.classList.remove('on'); document.body.style.overflow=''; }
-  function showLb(){
+  function step(d){ if(!curSet) return; cur=(cur+d+curSet.count)%curSet.count; renderLb(); }
+  function renderLb(){
     lbImg.src = fileFor(curSet, cur);
-    lbImg.alt = curSet.name + ' 사진 ' + pad(cur+1);
-    lbCount.textContent = curSet.name + ' · ' + (cur+1) + ' / ' + curSet.count;
-    lbBuy.textContent = curSet.name + ' 구매 문의';
+    lbImg.alt = (curSet.tagPrefix||curSet.name)+'-'+(cur+1);
+    lbNo.textContent = (curSet.tagPrefix||curSet.name)+'-'+(cur+1);
+    lbTi.textContent = curSet.exTitle || curSet.name;
+    lbCount.textContent = (cur+1)+' / '+curSet.count;
+    lbBuy.textContent = curSet.name+' 구매 문의';
     lbBuy.href = buyForm;
+    /* 옆 작품 미리 불러와 부드럽게 넘기기 */
+    [1,-1].forEach(function(d){
+      var j=(cur+d+curSet.count)%curSet.count;
+      var im=new Image(); im.src=fileFor(curSet,j);
+    });
   }
-  function move(d){ cur = (cur + d + curSet.count) % curSet.count; showLb(); }
   document.getElementById('lbClose').addEventListener('click', closeLb);
-  document.getElementById('lbPrev').addEventListener('click', function(){ move(-1); });
-  document.getElementById('lbNext').addEventListener('click', function(){ move(1); });
-  lb.addEventListener('click', function(e){ if(e.target === lb) closeLb(); });
+  document.getElementById('lbPrev').addEventListener('click', function(){ step(-1); });
+  document.getElementById('lbNext').addEventListener('click', function(){ step(1); });
+  lb.addEventListener('click', function(e){ if(e.target===lb) closeLb(); });
   document.addEventListener('keydown', function(e){
     if(!lb.classList.contains('on')) return;
-    if(e.key === 'Escape') closeLb();
-    else if(e.key === 'ArrowLeft') move(-1);
-    else if(e.key === 'ArrowRight') move(1);
+    if(e.key==='Escape') closeLb();
+    else if(e.key==='ArrowLeft') step(-1);
+    else if(e.key==='ArrowRight') step(1);
   });
+  /* 모바일 스와이프로 작품 넘기기 */
+  var tx=null;
+  lb.addEventListener('touchstart', function(e){ tx=e.changedTouches[0].clientX; }, {passive:true});
+  lb.addEventListener('touchend', function(e){
+    if(tx===null) return;
+    var dx=e.changedTouches[0].clientX-tx; tx=null;
+    if(Math.abs(dx)>40) step(dx<0?1:-1);
+  }, {passive:true});
 
+  /* ── 작품 떠오르기 ──
+     작품마다 한 번씩만 떠오릅니다.
+     화면 가장자리에서 조금 안쪽(위아래 14%)으로 들어왔을 때 시작해,
+     애니메이션이 화면 밖에서 끝나버리지 않게 합니다.
+     위로 스크롤 중에 처음 보이는 작품은 위에서 내려오는 방향으로 등장합니다. */
+  var lastY = scrollY, goingDown = true, hasScrolled = false;
+  addEventListener('scroll', function(){
+    var y = scrollY;
+    if(Math.abs(y - lastY) > 2){ goingDown = y > lastY; lastY = y; hasScrolled = true; }
+  }, {passive:true});
+
+  var io = ('IntersectionObserver' in window) ? new IntersectionObserver(function(es){
+    es.forEach(function(en){
+      if(!en.isIntersecting) return;
+      var el = en.target;
+      /* 방향을 바꿀 때 전환 효과가 끼면 결국 아래에서 올라온 것처럼 보이므로,
+         시작 위치는 애니메이션 없이 즉시 잡아준 뒤 떠오르게 함 */
+      el.classList.add('no-anim');
+      el.classList.toggle('from-above', hasScrolled && !goingDown);
+      void el.offsetWidth;           // 시작 위치를 즉시 반영
+      el.classList.remove('no-anim');
+      el.classList.add('in');
+      io.unobserve(el);              // 한 번 떠오르면 다시 관찰하지 않음
+    });
+  },{rootMargin:'-14% 0px -14% 0px', threshold:0}) : null;
+
+
+  /* ── 갤러리 소개 (전체 안내 + 카테고리 바로가기) ── */
+  var ghead = document.createElement('div');
+  ghead.className = 'ghead';
+  ghead.innerHTML =
+    '<div class="ey">Sayoudam Gallery</div>'+
+    '<h1 class="serif">사진 갤러리</h1>'+
+    '<div class="ln"></div>'+
+    '<p>사유담이 담아온 풍경을 전시하고, 마음에 남는 작품을 소장하실 수 있는 공간입니다.</p>'+
+    (sets.length ? '<div class="gchips" role="tablist" aria-label="작품 분류">'+sets.map(function(s,i){
+      return '<button class="gchip'+(i===0?' on':'')+'" type="button" role="tab" data-ex="'+i+'"'+
+        ' aria-selected="'+(i===0)+'">'+esc(s.name)+' 보기</button>';
+    }).join('')+'</div>' : '');
+  host.appendChild(ghead);
+
+  /* ── 전시 만들기 ── */
   if(!sets.length){
-    host.innerHTML = '<div class="gallery-ph" style="position:static;padding:60px 20px">갤러리 사진이 아직 등록되지 않았습니다.</div>';
+    host.insertAdjacentHTML('beforeend',
+      '<div class="soon"><div class="box"><div class="t serif">준비 중인 전시</div><p>새 전시를 준비하고 있습니다.</p></div></div>');
     return;
   }
 
-  sets.forEach(function(set){
+  sets.forEach(function(set, si){
     var sec = document.createElement('section');
-    sec.className = 'gset';
+    sec.id = 'ex'+(si+1);
+    sec.setAttribute('role','tabpanel');
+    if(si===0) sec.className = 'on';
 
-    // 세트 헤더
-    var head = document.createElement('div');
-    head.className = 'gset-head';
-    head.innerHTML =
-      '<div class="gset-title-row">' +
-        '<h2 class="gset-title">' + set.name + '</h2>' +
-        (set.badge ? '<span class="gset-badge">' + set.badge + '</span>' : '') +
-        '<span class="gset-count">' + set.count + '점</span>' +
-      '</div>' +
-      (set.desc ? '<p class="gset-desc">' + set.desc + '</p>' : '') +
-      (set.saleNote ? '<p class="gset-note"><span class="gset-note-ico">◆</span>' + set.saleNote + '</p>' : '') +
-      '<a class="gset-buy" href="' + buyForm + '" target="_blank" rel="noopener">' + set.name + ' 구매 문의</a>';
-    sec.appendChild(head);
+    var intro = document.createElement('div');
+    intro.className = 'intro';
+    intro.innerHTML =
+      '<div class="cat-row">'+
+        '<div class="cat-l">'+
+          '<h2 class="serif">'+esc(set.name)+'</h2>'+
+          '<div class="cat-meta">'+set.count+'점'+(set.badge?' · <span class="bd">'+esc(set.badge)+'</span>':'')+'</div>'+
+        '</div>'+
+        '<a class="buy-btn" href="'+buyForm+'" target="_blank" rel="noopener">구매 문의</a>'+
+      '</div>'+
+      (set.saleNote ? '<p class="cat-note">'+esc(set.saleNote)+'</p>' : '');
+    sec.appendChild(intro);
 
-    // 사진 그리드
-    var grid = document.createElement('div');
-    grid.className = 'gallery-grid';
+    /* 첫 사진을 먼저 확인해서, 없으면 빈 액자를 걸어 '준비 중'으로 표시 */
+    var probe = new Image();
+    probe.onload = function(){ buildWall(sec, set); };
+    probe.onerror = function(){
+      var meta = intro.querySelector('.cat-meta');
+      if(meta) meta.innerHTML = set.count+'점 예정'+(set.badge?' · <span class="bd">'+esc(set.badge)+'</span>':'');
+      var bb = intro.querySelector('.buy-btn'); if(bb) bb.remove();
+      buildWall(sec, set, true);
+    };
+    probe.src = fileFor(set, 0);
+
+    host.appendChild(sec);
+  });
+
+  /* ── 벽돌쌓기 배치: 각 작품이 실제 높이만큼만 그리드 행을 차지하게 함 ── */
+  var V_GAP = 64; // 작품 사이 세로 간격(px)
+  function sizePiece(el){
+    if(document.body.classList.contains('browse')) return; // 모아 보기에선 격자 자동 배치
+    var cap = el.querySelector('.cap');
+    if(!cap || !el.isConnected) return;
+    var mt = parseFloat(getComputedStyle(el).marginTop) || 0;
+    var h = cap.offsetTop + cap.offsetHeight + mt;
+    el.style.gridRowEnd = 'span ' + Math.max(1, Math.ceil((h + V_GAP) / 10));
+  }
+  function sizeAll(){ document.querySelectorAll('.wall .piece').forEach(sizePiece); }
+  var rsTimer;
+  addEventListener('resize', function(){ clearTimeout(rsTimer); rsTimer = setTimeout(sizeAll, 150); });
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(sizeAll);
+
+  function buildWall(sec, set, empty){
+    var wall = document.createElement('div');
+    wall.className = 'wall' + (empty ? ' wall-empty' : '');
     for(var i=0; i<set.count; i++){
       (function(i){
-        var num = pad(i+1);
-        var cell = document.createElement('div');
-        cell.className = 'gallery-item';
-        var img = new Image();
-        img.alt = set.name + ' 사진 ' + num;
-        img.loading = 'lazy';
-        img.decoding = 'async';
-        img.src = fileFor(set, i);
-        img.onerror = function(){ cell.innerHTML = '<div class="gallery-ph">사진 준비 중<br>#' + num + '</div>' + tagHtml(i); };
-        cell.appendChild(img);
-        cell.insertAdjacentHTML('beforeend', tagHtml(i));
-        cell.addEventListener('click', function(){ openLb(set, i); });
-        grid.appendChild(cell);
+        var no = (set.tagPrefix||set.name)+'-'+(i+1);
+        var el = document.createElement('div');
+        el.className = 'piece';
+
+        if(empty){
+          /* 사진이 준비되기 전: 빈 액자만 걸어둠 */
+          el.className += ' empty';
+          el.innerHTML = '<div class="frame"><div class="ph"><span>준비 중</span></div></div>'+
+            '<div class="cap"><span class="no">'+no+'</span></div>';
+          if(io) io.observe(el); else el.classList.add('in');
+          wall.appendChild(el);
+          return;
+        }
+
+        el.setAttribute('role','button');
+        el.setAttribute('tabindex','0');
+        el.setAttribute('aria-label', no+' 크게 보기');
+        el.innerHTML = '<div class="frame"><img src="'+fileFor(set,i)+'" alt="'+no+'" loading="lazy" decoding="async"></div>'+
+          '<div class="cap"><span class="no">'+no+'</span></div>';
+        var img = el.querySelector('img');
+        img.onload = function(){ sizePiece(el); };
+        img.onerror = function(){ el.remove(); };
+        el.addEventListener('click', function(){ openLb(set, i); });
+        el.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLb(set, i); } });
+        if(io) io.observe(el); else el.classList.add('in');
+        wall.appendChild(el);
       })(i);
     }
-    function tagHtml(i){ var label = (set.tagPrefix || set.name) + '-' + (i+1); return '<span class="gitem-tag">' + label + '</span>'; }
-    sec.appendChild(grid);
-    host.appendChild(sec);
+    sec.appendChild(wall);
+    requestAnimationFrame(function(){ wall.querySelectorAll('.piece').forEach(sizePiece); });
+  }
+
+  /* ── 분류 전환 (탭) ──
+     한 번에 한 분류만 보여주고, 분류에 맞는 전시 공간 색으로 함께 바뀝니다.
+     첫 분류(Q-set)는 낮의 미술관 벽, 그다음부터는 밤의 전시장. */
+  var tabs = Array.prototype.slice.call(ghead.querySelectorAll('.gchip'));
+  var panels = Array.prototype.slice.call(host.querySelectorAll('section[role=tabpanel]'));
+
+  function showEx(idx){
+    tabs.forEach(function(t,i){
+      t.classList.toggle('on', i===idx);
+      t.setAttribute('aria-selected', String(i===idx));
+    });
+    panels.forEach(function(p,i){ p.classList.toggle('on', i===idx); });
+    /* 다시 보일 때 배치를 정확히 다시 계산 */
+    requestAnimationFrame(function(){ requestAnimationFrame(sizeAll); });
+  }
+  function applyTheme(){
+    /* 모든 분류를 밝은 미술관 벽으로 통일 */
+    document.documentElement.style.setProperty('--t', '0');
+    document.body.classList.remove('night');
+  }
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){ showEx(parseInt(t.dataset.ex,10) || 0); });
+  });
+  applyTheme();
+
+  /* ── 보기 방식 전환: 전시 보기 ↔ 모아 보기 ── */
+  var vmE = document.getElementById('vmExhibit'), vmB = document.getElementById('vmBrowse');
+  function setMode(browse){
+    document.body.classList.toggle('browse', browse);
+    vmE.classList.toggle('on', !browse); vmE.setAttribute('aria-pressed', String(!browse));
+    vmB.classList.toggle('on', browse);  vmB.setAttribute('aria-pressed', String(browse));
+    if(browse){
+      /* 격자 자동 배치를 위해 벽돌쌓기 계산을 걷어냄 */
+      document.querySelectorAll('.wall .piece').forEach(function(el){ el.style.gridRowEnd=''; });
+    }else{
+      requestAnimationFrame(sizeAll);
+    }
+  }
+  vmE.addEventListener('click', function(){ setMode(false); });
+  vmB.addEventListener('click', function(){ setMode(true); });
+
+  /* ── 퇴장 전환: 사이트로 돌아갈 때 밝은 톤으로 부드럽게 페이드 ── */
+  document.addEventListener('click', function(e){
+    if(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button!==0) return;
+    var a = e.target;
+    while(a && a.tagName!=='A') a = a.parentElement;
+    if(!a) return;
+    var href = a.getAttribute('href')||'';
+    if(href.indexOf('index.html')===-1 || a.target==='_blank') return;
+    e.preventDefault();
+    /* 화면이 밝게 흐려진 뒤 이동 → 도착한 사이트가 서서히 또렷해짐 */
+    var ov = document.createElement('div');
+    ov.id = 'exitDim';
+    ov.style.cssText = 'position:fixed;inset:0;z-index:9999;background:#f6f1e8;opacity:0;transition:opacity .8s ease;pointer-events:none';
+    document.body.appendChild(ov);
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ ov.style.opacity='1'; }); });
+    setTimeout(function(){
+      try{ sessionStorage.setItem('sydArrive','1'); }catch(err){}
+      location.href = href;
+    }, 860);
+  });
+  window.addEventListener('pageshow', function(){
+    var ov = document.getElementById('exitDim'); if(ov) ov.remove();
   });
 })();
 </script>

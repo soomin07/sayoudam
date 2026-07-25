@@ -154,5 +154,64 @@ function renderFooter(){
     </footer>`;
 }
 
+/* ---------- 하위페이지 상단 배경사진 랜덤 적용 ----------
+   .page-hero.hero-photo 가 있는 페이지에서만 동작.
+   들어올 때 무작위로 한 장을 골라 깔고, 보는 동안은 고정(자동으로 안 바뀜). */
+function applyRandomHero(){
+  const hero = document.querySelector('.page-hero.hero-photo');
+  if(!hero || !SITE.heroImages || !SITE.heroImages.length) return;
+  const item = SITE.heroImages[Math.floor(Math.random()*SITE.heroImages.length)];
+  const src = item.src || item;                 // 문자열/객체 둘 다 허용
+  const pos = item.pos || 'center 45%';
+  const wash = 'linear-gradient(rgba(43,29,23,.36),rgba(43,29,23,.5))';
+  hero.style.backgroundImage = `${wash},url('${ROOT}images/${src}')`;
+  hero.style.backgroundPosition = pos;
+}
+
+/* ---------- 갤러리 입장 전환 ----------
+   '사진 구매(갤러리)' 링크를 누르면, 보던 화면이 핸드폰 밝기 낮추듯
+   부드럽게 어두워진 뒤 갤러리로 이동합니다. */
+function initGalleryDim(){
+  document.addEventListener('click', e=>{
+    if(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button!==0) return; // 새 탭 열기 등은 그대로
+    let a = e.target;
+    while(a && a.tagName!=='A') a = a.parentElement;
+    if(!a) return;
+    const href = a.getAttribute('href')||'';
+    if(href.indexOf('gallery.html')===-1 || a.target==='_blank') return;
+    e.preventDefault();
+    const ov = document.createElement('div');
+    ov.id = 'galleryDim';
+    ov.style.cssText = 'position:fixed;inset:0;z-index:9999;background:#e2e1dd;opacity:0;transition:opacity .85s ease;pointer-events:none';
+    document.body.appendChild(ov);
+    requestAnimationFrame(()=> requestAnimationFrame(()=> ov.style.opacity='1'));
+    setTimeout(()=>{ location.href = href; }, 870);
+  });
+  // 뒤로가기로 돌아왔을 때 어둠이 남지 않도록 제거
+  window.addEventListener('pageshow', ()=>{
+    const ov = document.getElementById('galleryDim');
+    if(ov) ov.remove();
+  });
+}
+
+/* ---------- 갤러리에서 돌아왔을 때 ----------
+   어두운 화면에서 시작해, 사이트가 서서히 밝아지며 나타납니다. */
+function initArriveFade(){
+  let arrived = false;
+  try{
+    arrived = sessionStorage.getItem('sydArrive')==='1';
+    if(arrived) sessionStorage.removeItem('sydArrive');
+  }catch(e){}
+  if(!arrived) return;
+  const ov = document.createElement('div');
+  ov.style.cssText = 'position:fixed;inset:0;z-index:9999;background:#f6f1e8;opacity:1;transition:opacity 1.1s ease;pointer-events:none';
+  document.body.appendChild(ov);
+  requestAnimationFrame(()=> requestAnimationFrame(()=>{ ov.style.opacity='0'; }));
+  setTimeout(()=> ov.remove(), 1300);
+}
+
 renderHeader();
 renderFooter();
+applyRandomHero();
+initGalleryDim();
+initArriveFade();
