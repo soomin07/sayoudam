@@ -40,7 +40,6 @@ const SITE = {
   nav: [
     { title: '센터 소개', items: [
         { label: '사유담 소개', target: 'pages/about.html' },
-        { label: '인사말', target: 'pages/greeting.html' },
         { label: '상담사 소개', target: 'pages/counselor.html' },
     ]},
     { title: '이용안내', items: [
