@@ -284,6 +284,9 @@ const SITE = {
      ※ 사진이 아직 없는 전시는 '준비 중'으로 우아하게 표시됩니다. */
   gallery: {
     buyForm: 'https://naver.me/FKGN3DYG',
+    /* 사진을 교체하거나 순서를 바꾼 뒤에는 이 숫자를 1 올려주세요.
+       파일 이름이 같아도 브라우저가 새 사진으로 다시 불러옵니다. */
+    imgRev: 2,
     sets: [
       {
         name: 'Q-set',

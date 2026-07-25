@@ -323,7 +323,7 @@ body.browse .piece.empty .ph{aspect-ratio:1/1}
   <a class="site" href="../index.html">사유담 사이트로 돌아가기</a>
 </div>
 
-<script src="../data.js?v=4"></script>
+<script src="../data.js?v=5"></script>
 <script>
 (function(){
   'use strict';
@@ -339,7 +339,9 @@ body.browse .piece.empty .ph{aspect-ratio:1/1}
   document.getElementById('footInfo').textContent = '작품 구매 문의 ' + (S.phone || '');
 
   function pad(n){ return (n<10?'0':'') + n; }
-  function fileFor(set, i){ return '../' + set.folder + '/photo' + pad(i+1) + '.' + (set.ext||'jpg'); }
+  /* 사진 주소 뒤에 버전을 붙여, 파일 이름이 같아도 바뀐 사진을 다시 불러오게 함 */
+  var IMG_REV = g.imgRev ? ('?v=' + g.imgRev) : '';
+  function fileFor(set, i){ return '../' + set.folder + '/photo' + pad(i+1) + '.' + (set.ext||'jpg') + IMG_REV; }
   function esc(s){ var d=document.createElement('div'); d.textContent=s||''; return d.innerHTML; }
 
   /* ── 입장 전환: 갤러리에 들어올 때마다 재생 ── */
