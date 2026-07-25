@@ -72,9 +72,9 @@ const SITE = {
         { label: '자주묻는질문', target: 'pages/faq.html' },
         { label: '블로그', target: 'blog' },
     ]},
-    { title: '사진갤러리', items: [
-        { label: '사진 구매', target: 'pages/gallery.html' },
-    ]},
+    /* cta:true 를 붙이면 펼쳐지는 메뉴가 아니라, 오른쪽에 떨어져 있는
+       '버튼'으로 표시되고 누르면 바로 그 페이지로 이동합니다. */
+    { title: '사진갤러리', cta: true, target: 'pages/gallery.html' },
   ],
 
   /* ---------- 상단 메인 슬라이드 (센터 이미지 3~4장) ----------

@@ -49,18 +49,27 @@ function renderHeader(){
     ? `<img class="brand-logo" src="${ROOT}images/${SITE.logo}" alt="${SITE.centerName}">${brandText}`
     : brandText;
 
-  const navHtml = SITE.nav.map(g=>`
+  const navHtml = SITE.nav.map(g=>{
+    // cta 항목: 펼쳐지는 메뉴가 아니라 오른쪽에 떨어진 '버튼'
+    if(g.cta){
+      return `<a class="nav-cta" href="${resolveTarget(g.target)}" data-target="${g.target||''}">
+        <span class="nc-txt">${g.title}</span>
+        <span class="nc-arw" aria-hidden="true">→</span>
+      </a>`;
+    }
+    return `
     <div class="nav-group">
       <span class="nav-title">${g.title}</span>
       <div class="nav-drop">
-        ${g.items.map(it=>{
+        ${(g.items||[]).map(it=>{
           const url = resolveTarget(it.target);
           const ext = (it.target==='apply'||it.target==='blog'||(it.target||'').startsWith('http'))
             ? ' target="_blank" rel="noopener"' : '';
           return `<a href="${url}" data-target="${it.target||''}"${ext}>${it.label}</a>`;
         }).join('')}
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 
   host.innerHTML = `
     <header class="topbar">
@@ -159,13 +168,35 @@ function renderFooter(){
    들어올 때 무작위로 한 장을 골라 깔고, 보는 동안은 고정(자동으로 안 바뀜). */
 function applyRandomHero(){
   const hero = document.querySelector('.page-hero.hero-photo');
-  if(!hero || !SITE.heroImages || !SITE.heroImages.length) return;
-  const item = SITE.heroImages[Math.floor(Math.random()*SITE.heroImages.length)];
-  const src = item.src || item;                 // 문자열/객체 둘 다 허용
-  const pos = item.pos || 'center 45%';
+  if(!hero) return;
+  if(!SITE.heroImages || !SITE.heroImages.length){
+    console.warn('[사유담] data.js 에 heroImages 목록이 없습니다. data.js 를 새로 올려주세요.');
+    return;
+  }
   const wash = 'linear-gradient(rgba(43,29,23,.36),rgba(43,29,23,.5))';
-  hero.style.backgroundImage = `${wash},url('${ROOT}images/${src}')`;
-  hero.style.backgroundPosition = pos;
+  // 무작위 순서로 시도해, 실제로 불러와지는 첫 사진을 사용합니다.
+  const list = SITE.heroImages.slice().sort(()=> Math.random() - .5);
+
+  (function tryNext(i){
+    if(i >= list.length){
+      // 사진을 하나도 못 찾으면 사진 없는 원래 모습으로 (글씨가 안 보이는 일 방지)
+      console.warn('[사유담] 배경 사진을 찾을 수 없습니다. images/hero 폴더가 업로드되었는지 확인해 주세요.'
+        + ' 확인용 주소: ' + ROOT + 'images/' + (list[0].src || list[0]));
+      return;
+    }
+    const item = list[i];
+    const src = item.src || item;               // 문자열/객체 둘 다 허용
+    const pos = item.pos || 'center 45%';
+    const url = ROOT + 'images/' + src;
+    const probe = new Image();
+    probe.onload = ()=>{
+      hero.style.backgroundImage = `${wash},url('${url}')`;
+      hero.style.backgroundPosition = pos;
+      hero.classList.add('hero-ready');         // 사진이 확인된 뒤에만 사진용 스타일 적용
+    };
+    probe.onerror = ()=> tryNext(i + 1);
+    probe.src = url;
+  })(0);
 }
 
 /* ---------- 갤러리 입장 전환 ----------

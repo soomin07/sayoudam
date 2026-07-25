@@ -49,6 +49,34 @@ section{padding:90px 0}
 .nav-drop a{display:block;padding:9px 20px;font-size:.9rem;color:var(--ink-soft);white-space:nowrap;text-align:center;transition:.15s}
 .nav-drop a:hover{background:var(--paper-deep);color:var(--accent)}
 
+/* ── 사진갤러리: 평소엔 다른 카테고리와 같은 모습,
+   마우스를 올리면 은은한 강조 배경과 화살표로 '이동하는 링크'임을 알림 ── */
+.mainnav-inner{position:relative}
+.nav-cta{
+  display:inline-flex;align-items:center;justify-content:center;position:relative;
+  padding:16px 16px;
+  font-family:'Gowun Batang',serif;font-size:.98rem;font-weight:700;letter-spacing:.02em;
+  color:var(--ink);white-space:nowrap;
+  transition:color .3s ease;
+}
+/* 강조 배경은 별도 층으로 그려, 위아래 경계와 넉넉히 떨어지게 함 */
+.nav-cta::before{
+  content:"";position:absolute;inset:9px 0;z-index:0;border-radius:6px;
+  background:rgba(125,31,44,0);transition:background-color .3s ease;
+}
+/* 화살표가 나타날 때 글씨가 왼쪽으로 살짝 물러나, 글씨+화살표가 가운데 놓임 */
+.nav-cta .nc-txt{position:relative;z-index:1;transition:transform .35s cubic-bezier(.3,.7,.2,1)}
+/* 화살표는 오른쪽 여백 안에 겹쳐 두어, 나타날 때 옆 메뉴가 밀리지 않음 */
+.nav-cta .nc-arw{
+  position:absolute;right:8px;top:50%;z-index:1;font-size:.74rem;
+  opacity:0;transform:translate(-5px,-50%);
+  transition:opacity .3s ease,transform .35s cubic-bezier(.3,.7,.2,1);
+}
+.nav-cta:hover{color:var(--accent)}
+.nav-cta:hover::before{background:rgba(125,31,44,.075)}
+.nav-cta:hover .nc-txt{transform:translateX(-8px)}
+.nav-cta:hover .nc-arw{opacity:.7;transform:translate(0,-50%)}
+
 /* ===== 메인 슬라이드 ===== */
 .hero-slider{position:relative;height:min(72vh,620px);overflow:hidden;background:var(--paper-deep)}
 .slide{position:absolute;inset:0;opacity:0;transition:opacity 1s ease;display:flex;align-items:center;justify-content:center}
@@ -184,6 +212,12 @@ footer{background:var(--darker);color:#a99a97;padding:40px 0;font-size:.85rem}
   .nav-group>.nav-title{padding:14px 8px;border-bottom:1px dashed var(--line)}
   .nav-drop{position:static;transform:none;opacity:1;visibility:visible;box-shadow:none;border:0;padding:0 0 8px;background:var(--paper-deep)}
   .nav-drop a{text-align:left;padding-left:24px}
+  /* 모바일: 갤러리 버튼은 목록 아래 가로 전체로 */
+  /* 모바일: 다른 카테고리와 같은 줄 형식으로 */
+  .nav-cta{margin:0;padding:14px 8px;justify-content:flex-start;
+    border-bottom:1px dashed var(--line);width:100%}
+  .nav-cta::before{inset:4px 0}
+  .nav-cta .nc-arw{opacity:.6;right:10px;transform:translate(0,-50%)}
 }
 @media(max-width:520px){
   body{zoom:1}
@@ -195,9 +229,9 @@ footer{background:var(--darker);color:#a99a97;padding:40px 0;font-size:.85rem}
   .brand .txt small{font-size:.5rem;letter-spacing:.22em}
   .top-apply{padding:7px 13px;font-size:.8rem}
   .nav-toggle{font-size:1.5rem}
-  .page-hero.hero-photo{min-height:44vh;padding:44px 0}
-  .page-hero.hero-photo h1{font-size:2rem}
-  .page-hero.hero-photo p{font-size:.98rem}
+  .page-hero.hero-photo.hero-ready{min-height:44vh;padding:44px 0}
+  .page-hero.hero-photo.hero-ready h1{font-size:2rem}
+  .page-hero.hero-photo.hero-ready p{font-size:.98rem}
 }
 @media(max-width:640px){
   /* 모바일: 슬라이드 화살표가 문구를 가리지 않게 — 작게, 가장자리로, 문구에 여백 */
@@ -214,12 +248,14 @@ footer{background:var(--darker);color:#a99a97;padding:40px 0;font-size:.85rem}
 .page-hero p{color:var(--ink-soft);max-width:600px;margin:0 auto}
 /* 사진 배경 hero (센터 소개·인사말 등) — 배경 이미지는 common.js가 랜덤으로 넣어줌
    사진이 위아래로 잘리지 않도록 배너를 넉넉히 키우고 글자도 그만큼 크게 */
-.page-hero.hero-photo{min-height:56vh;display:flex;align-items:center;padding:56px 0;border-bottom:none;background-color:var(--paper-deep);background-size:cover;background-position:center 42%}
-.page-hero.hero-photo > .wrap{width:100%}
-.page-hero.hero-photo .eyebrow{font-size:.8rem;color:#f2e6cf;margin-bottom:20px}
-.page-hero.hero-photo h1{font-size:2.7rem;color:#fffdf8;text-shadow:0 1px 14px rgba(0,0,0,.3)}
-.page-hero.hero-photo h1::after{content:"";display:block;width:52px;height:2px;background:#d9b98a;margin:20px auto 6px}
-.page-hero.hero-photo p{font-size:1.08rem;color:#f2ebdc;margin-top:6px}
+/* 사진이 실제로 불러와진 뒤에만(.hero-ready) 사진용 스타일을 적용합니다.
+   사진을 못 찾더라도 글씨가 안 보이거나 얼룩진 배경만 남는 일이 없도록 분리했습니다. */
+.page-hero.hero-photo.hero-ready{min-height:56vh;display:flex;align-items:center;padding:56px 0;border-bottom:none;background-color:var(--paper-deep);background-size:cover;background-position:center 42%}
+.page-hero.hero-photo.hero-ready > .wrap{width:100%}
+.page-hero.hero-photo.hero-ready .eyebrow{font-size:.8rem;color:#f2e6cf;margin-bottom:20px}
+.page-hero.hero-photo.hero-ready h1{font-size:2.7rem;color:#fffdf8;text-shadow:0 1px 14px rgba(0,0,0,.3)}
+.page-hero.hero-photo.hero-ready h1::after{content:"";display:block;width:52px;height:2px;background:#d9b98a;margin:20px auto 6px}
+.page-hero.hero-photo.hero-ready p{font-size:1.08rem;color:#f2ebdc;margin-top:6px}
 .page-body{padding:70px 0;min-height:40vh}
 .page-body .wrap{max-width:820px}
 .page-body h2{font-size:1.5rem;margin:36px 0 16px}
