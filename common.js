@@ -89,27 +89,46 @@ function renderHeader(){
       if(typeof openTour === 'function' && !IN_PAGES){ e.preventDefault(); openTour(); }
     });
   });
-  // 카테고리 제목 탭(클릭)으로 펼치기 — 터치 기기(아이패드 등)에서 hover가 안 되는 문제 해결
+  /* 카테고리 제목 탭(클릭)으로 펼치기 — 터치 기기(아이패드 등)에서 hover가 안 되는 문제 해결
+     모바일에서는 항목 수만큼의 '실제 높이'를 재서 넣어줍니다.
+     (높이를 넉넉히 잡아두면 빈 공간에서 애니메이션이 헛돌아 뚝뚝 끊겨 보입니다) */
+  const isNarrow = ()=> matchMedia('(max-width:860px)').matches;
+  function closeGroups(){
+    host.querySelectorAll('.nav-group.open').forEach(g=>{
+      g.classList.remove('open');
+      const d = g.querySelector('.nav-drop');
+      if(d) d.style.maxHeight = '';
+    });
+  }
   host.querySelectorAll('.nav-group > .nav-title').forEach(title=>{
     title.addEventListener('click', e=>{
       const group = title.parentElement;
       const isOpen = group.classList.contains('open');
-      host.querySelectorAll('.nav-group.open').forEach(g=> g.classList.remove('open'));
-      if(!isOpen) group.classList.add('open');
+      closeGroups();
+      if(!isOpen){
+        group.classList.add('open');
+        const drop = group.querySelector('.nav-drop');
+        if(drop && isNarrow()) drop.style.maxHeight = drop.scrollHeight + 'px';
+      }
       e.stopPropagation();
     });
   });
   // 바깥을 탭하면 열린 메뉴 닫기
-  document.addEventListener('click', ()=>{
-    host.querySelectorAll('.nav-group.open').forEach(g=> g.classList.remove('open'));
-  });
+  document.addEventListener('click', closeGroups);
   // 하위 링크 클릭 시 메뉴 닫기
   host.querySelectorAll('.nav-drop a').forEach(a=>{
     a.addEventListener('click', ()=>{
       _('mainnav')?.classList.remove('open');
-      host.querySelectorAll('.nav-group.open').forEach(g=> g.classList.remove('open'));
+      closeGroups();
     });
   });
+  // 화면 크기가 바뀌면 잔여 높이값 정리
+  addEventListener('resize', ()=>{
+    host.querySelectorAll('.nav-drop').forEach(d=>{
+      if(!isNarrow()) d.style.maxHeight = '';
+      else if(d.parentElement.classList.contains('open')) d.style.maxHeight = d.scrollHeight + 'px';
+    });
+  }, {passive:true});
   _('navToggle')?.addEventListener('click', ()=> _('mainnav')?.classList.toggle('open'));
 }
 

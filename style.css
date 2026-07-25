@@ -221,10 +221,12 @@ footer{background:var(--darker);color:#a99a97;padding:40px 0;font-size:.85rem}
   }
   .nav-group.open>.nav-title{color:var(--accent)}
   .nav-group.open>.nav-title::after{transform:translateY(-25%) rotate(-135deg);border-color:var(--accent)}
+  /* 여백은 항상 켜두고(border-box라 접혔을 땐 안 보임) 높이만 움직여
+     여백이 툭 튀는 현상을 없앰. 실제 높이는 common.js가 재서 넣어줌 */
   .nav-drop{position:static;transform:none;opacity:1;visibility:visible;box-shadow:none;border:0;
-    background:var(--paper-deep);max-height:0;overflow:hidden;padding:0;
-    transition:max-height .35s ease}
-  .nav-group.open>.nav-drop{max-height:420px;padding:4px 0 8px}
+    background:var(--paper-deep);max-height:0;overflow:hidden;padding:4px 0 8px;
+    transition:max-height .34s cubic-bezier(.32,.72,.28,1)}
+  .nav-group.open>.nav-drop{max-height:420px}
   .nav-drop a{text-align:left;padding:11px 20px 11px 26px;border-bottom:1px solid rgba(226,213,189,.4)}
   .nav-drop a:last-child{border-bottom:0}
   /* 모바일: 갤러리는 목록 맨 아래, 와인색 버튼으로 또렷하게 */
