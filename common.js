@@ -143,7 +143,7 @@ function renderFooter(){
 
   /* 채널 버튼 — mark 는 서비스를 알아보게 하는 글자 표시 (N=네이버, B=브런치) */
   const sns = [
-    {url:SITE.blogUrl,      label:'네이버 블로그', mark:'N',  cls:'sns-naver'},
+    {url:SITE.blogUrl,      label:'블로그',       mark:'N',  cls:'sns-naver'},
     {url:SITE.brunchUrl,    label:'브런치',       mark:'B',  cls:'sns-brunch'},
     {url:SITE.instagramUrl, label:'인스타그램',   mark:'◉',  cls:''},
     {url:SITE.youtubeUrl,   label:'유튜브',       mark:'▶',  cls:''},

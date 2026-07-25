@@ -71,7 +71,7 @@ const SITE = {
     { title: '센터소식', items: [
         { label: '공지사항', target: 'pages/notice.html' },
         { label: '자주묻는질문', target: 'pages/faq.html' },
-        { label: '네이버 블로그', target: 'blog' },
+        { label: '블로그', target: 'blog' },
         { label: '브런치', target: 'brunch' },
     ]},
     /* cta:true 를 붙이면 펼쳐지는 메뉴가 아니라, 오른쪽에 떨어져 있는
