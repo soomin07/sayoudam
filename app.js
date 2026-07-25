@@ -53,7 +53,7 @@ const $ = (id) => document.getElementById(id);
   $('quickGrid').querySelectorAll('.quick-card').forEach(card=>{
     card.onclick = ()=>{
       const a = card.dataset.action;
-      if(a==='counselor') location.hash='#counselor';
+      if(a==='counselor') location.href='pages/counselor.html';
       else if(a==='tour') openTour();
       else if(a==='apply') window.open(SITE.applyForm,'_blank');
       else if(a && a.startsWith('http')) window.open(a,'_blank');

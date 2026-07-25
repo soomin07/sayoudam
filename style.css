@@ -199,6 +199,8 @@ footer{background:var(--darker);color:#a99a97;padding:40px 0;font-size:.85rem}
   .quick-grid{grid-template-columns:1fr}
   .counselor-grid{grid-template-columns:1fr;gap:28px}
   .portrait{max-width:260px}
+  .assoc-team{margin-top:48px;padding-top:34px}
+  .assoc-profile{margin-top:24px!important;margin-bottom:36px}
   .contact-grid{grid-template-columns:1fr 1fr;gap:28px}
   .slide-text h2{font-size:1.7rem}
   .section-title{font-size:1.5rem}
@@ -361,13 +363,14 @@ footer{background:var(--darker);color:#a99a97;padding:40px 0;font-size:.85rem}
 .voucher-note{margin-top:14px;display:inline-block;background:var(--paper-deep);border-left:3px solid var(--warm);padding:9px 16px;border-radius:2px;color:var(--accent-deep);font-weight:700;font-size:.94rem}
 @media(max-width:640px){.rec-list{grid-template-columns:1fr}}
 /* ===== 상담사 소개: 추후 합류 예정 자리 ===== */
-.coming-team{margin-top:56px;border-top:1px solid var(--line);padding-top:40px}
-.coming-team h2{font-size:1.3rem;color:var(--ink);margin-bottom:8px}
-.coming-team .ct-lead{color:var(--ink-soft);font-size:.95rem;margin-bottom:28px}
-.coming-profile{margin-top:0!important;margin-bottom:44px}
-.coming-profile:last-child{margin-bottom:0}
-.coming-profile .coming-name{color:var(--ink-soft)}
-.coming-badge{display:inline-block;background:var(--paper-deep);border:1px solid var(--line);color:var(--ink-soft);font-size:.72rem;padding:4px 12px;border-radius:20px;margin-bottom:12px}
+/* ===== 함께하는 상담사 (자문·수퍼비전 협력) ===== */
+.assoc-team{margin-top:64px;border-top:1px solid var(--line);padding-top:44px}
+.assoc-team h2{font-size:1.35rem;color:var(--ink);margin-bottom:8px}
+.assoc-team .ct-lead{color:var(--ink-soft);font-size:.95rem;margin-bottom:8px}
+.assoc-profile{margin-top:32px!important;margin-bottom:48px}
+.assoc-profile:last-child{margin-bottom:0}
+/* 소속 기관 — 이름 바로 아래 */
+.assoc-affil{margin-top:10px;color:var(--ink-soft);font-size:.92rem;line-height:1.8}
 /* ===== '더 보기' 링크 ===== */
 .more-link{display:inline-block;font-family:'Gowun Batang',serif;color:var(--accent);font-size:1rem;padding:9px 22px;border:1px solid var(--accent);border-radius:24px;transition:.2s}
 .more-link:hover{background:var(--accent);color:#fff}
