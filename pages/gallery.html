@@ -238,9 +238,16 @@ body.browse .piece.empty .ph{aspect-ratio:1/1}
   body.browse .wall{grid-template-columns:repeat(2,1fr);column-gap:14px;row-gap:20px}
   .intro{padding:64px 24px 40px}
   .ghead{padding:60px 24px 4px}
-  .gbar{padding:12px 16px;flex-wrap:wrap}
-  .vbtn .lbl{display:none}
-  .vbtn{padding:8px 10px}
+  /* 상단 바: 위줄은 이름 + 나가기, 아래줄은 보기 버튼을 가운데로 */
+  .gbar{padding:13px 18px 0;flex-wrap:wrap;row-gap:0}
+  .gbar .b{order:1}
+  .gbar .b .n{font-size:1.05rem}
+  .gbar .b .s{font-size:.6rem;letter-spacing:.24em}
+  .gbar a.back{order:2;margin-left:auto;font-size:.8rem}
+  .vmode{order:3;width:100%;margin:11px 0 0;justify-content:center;gap:10px;
+    border-top:1px solid var(--line);padding:9px 0 10px}
+  .vbtn{padding:7px 16px;font-size:.8rem}
+  .vbtn svg{width:22px;height:22px}
   #lb .nav{font-size:1.9rem;padding:14px}
   #lb img{max-width:92vw}
   .gfoot{padding:28px 22px 38px}
