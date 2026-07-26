@@ -387,6 +387,19 @@ footer{background:var(--darker);color:#a99a97;padding:40px 0;font-size:.85rem}
 .info-row .k{flex:0 0 88px;font-family:'Gowun Batang',serif;color:var(--accent-deep);font-weight:700}
 .info-row .v{color:var(--ink-soft);line-height:1.6}
 .voucher-note{margin-top:14px;display:inline-block;background:var(--paper-deep);border-left:3px solid var(--warm);padding:9px 16px;border-radius:2px;color:var(--accent-deep);font-weight:700;font-size:.94rem}
+/* 비용안내 — 분류별 신청 버튼 */
+.fee-apply{display:flex;justify-content:flex-end;margin:14px 0 34px}
+.fee-btn{display:inline-block;padding:11px 26px;border:1px solid var(--accent);color:var(--accent);
+  font-size:.9rem;border-radius:2px;transition:background .25s,color .25s}
+.fee-btn:hover{background:var(--accent);color:var(--paper)}
+@media(max-width:520px){
+  .fee-apply{justify-content:stretch;margin:12px 0 30px}
+  .fee-btn{width:100%;text-align:center;padding:13px 20px}
+}
+
+/* 센터 안내 페이지 — 중요한 정보라 한 줄 전체를 차지하며 조금 더 크게 */
+.voucher-wide{display:block;margin:0;padding:16px 22px;font-size:1.02rem;
+  border-left-width:4px;border-left-color:var(--accent);line-height:1.7}
 @media(max-width:640px){.rec-list{grid-template-columns:1fr}}
 /* ===== 상담사 소개: 추후 합류 예정 자리 ===== */
 /* ===== 함께하는 상담사 (자문·수퍼비전 협력) ===== */

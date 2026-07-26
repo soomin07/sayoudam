@@ -22,7 +22,13 @@ const SITE = {
   businessNumber: '',    // 사업자등록번호
 
   /* ---------- 링크 ---------- */
-  applyForm: 'https://form.naver.com/response/C8w4QvU-AZjW6tp7cMgtcQ', // 예약(상담신청)
+  /* ---------- 신청서(네이버 폼) 주소 ----------
+     ※ 반드시 /response/ 주소를 넣으세요.
+        네이버 폼 편집화면 주소(/edit/)를 넣으면 방문자가 편집화면으로 갑니다. */
+  applyForm: 'https://form.naver.com/response/C8w4QvU-AZjW6tp7cMgtcQ',  // 상담 신청서 (개인·커플/부부·청소년/부모·가족)
+  programForm: 'https://form.naver.com/response/IxwFcIJf1gf',           // 프로그램·집단 신청서 (사진치료, 부모교육, 사진 집단상담, SP, 상담자 훈련)
+  testForm: 'https://form.naver.com/response/8OxsBQIzIEk',              // 심리검사 신청서
+  eapForm: 'https://form.naver.com/response/6qmqyRRaB83',               // 기업·직장인 상담 문의
   blogUrl: 'https://blog.naver.com/sayoudam',          // 네이버 블로그
   brunchUrl: 'https://brunch.co.kr/@sayoudam',         // 브런치
   instagramUrl: '',      // 인스타 주소
@@ -40,7 +46,7 @@ const SITE = {
      (부모님이 하실 일은 아니고, 필요할 때 요청하시면 됩니다) */
   nav: [
     { title: '센터 소개', items: [
-        { label: '사유담 소개', target: 'pages/about.html' },
+        { label: '센터 안내', target: 'pages/about.html' },
         { label: '상담사 소개', target: 'pages/counselor.html' },
     ]},
     { title: '이용안내', items: [
@@ -283,7 +289,7 @@ const SITE = {
                     (사진을 더 넣으면 이 숫자만 늘리면 됩니다)
      ※ 사진이 아직 없는 전시는 '준비 중'으로 우아하게 표시됩니다. */
   gallery: {
-    buyForm: 'https://naver.me/FKGN3DYG',
+    buyForm: 'https://form.naver.com/response/84htKOPCILu',   // 사진 구매 신청서
     /* 사진을 교체하거나 순서를 바꾼 뒤에는 이 숫자를 1 올려주세요.
        파일 이름이 같아도 브라우저가 새 사진으로 다시 불러옵니다. */
     imgRev: 2,
