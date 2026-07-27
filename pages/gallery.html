@@ -344,7 +344,7 @@ body.browse .piece.empty .ph{aspect-ratio:1/1}
   </div>
 </div>
 
-<script src="../data.js?v=12"></script>
+<script src="../data.js?v=13"></script>
 <script>
 (function(){
   'use strict';
@@ -393,8 +393,25 @@ body.browse .piece.empty .ph{aspect-ratio:1/1}
       lbCount = document.getElementById('lbCount'), lbBuy = document.getElementById('lbBuy');
   var curSet = null, cur = 0;
 
-  function openLb(set, i){ curSet=set; cur=i; renderLb(); lb.classList.add('on'); document.body.style.overflow='hidden'; }
-  function closeLb(){ lb.classList.remove('on'); document.body.style.overflow=''; }
+  /* 작품을 무엇으로 열었는지 기억해 둡니다.
+     마우스로 열고 Esc로 닫으면 브라우저가 '키보드 사용 중'으로 판단해
+     작품 둘레에 금색 초점 테두리를 남기는데, 그것을 막기 위함입니다. */
+  var lbOpener = null, lbByKey = false;
+
+  function openLb(set, i, el, byKey){
+    curSet=set; cur=i; lbOpener = el || null; lbByKey = !!byKey;
+    renderLb(); lb.classList.add('on'); document.body.style.overflow='hidden';
+  }
+  function closeLb(){
+    lb.classList.remove('on'); document.body.style.overflow='';
+    if(lbOpener){
+      // 키보드로 열었으면 초점을 제자리에 돌려주고(접근성),
+      // 마우스로 열었으면 초점을 풀어 테두리가 남지 않게 합니다.
+      if(lbByKey) lbOpener.focus({preventScroll:true});
+      else        lbOpener.blur();
+      lbOpener = null;
+    }
+  }
   function step(d){ if(!curSet) return; cur=(cur+d+curSet.count)%curSet.count; renderLb(); }
   function renderLb(){
     lbImg.src = fileFor(curSet, cur);
@@ -552,8 +569,8 @@ body.browse .piece.empty .ph{aspect-ratio:1/1}
         var img = el.querySelector('img');
         img.onload = function(){ sizePiece(el); };
         img.onerror = function(){ el.remove(); };
-        el.addEventListener('click', function(){ openLb(set, i); });
-        el.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLb(set, i); } });
+        el.addEventListener('click', function(){ openLb(set, i, el, false); });
+        el.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLb(set, i, el, true); } });
         if(io) io.observe(el); else el.classList.add('in');
         wall.appendChild(el);
       })(i);
