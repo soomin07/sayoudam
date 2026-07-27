@@ -310,7 +310,7 @@ const SITE = {
     buyForm: 'https://form.naver.com/response/84htKOPCILu',   // 사진 구매 신청서
     /* 사진을 교체하거나 순서를 바꾼 뒤에는 이 숫자를 1 올려주세요.
        파일 이름이 같아도 브라우저가 새 사진으로 다시 불러옵니다. */
-    imgRev: 6,
+    imgRev: 7,
     sets: [
       {
         name: 'Q-set',
