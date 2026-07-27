@@ -181,7 +181,13 @@ function renderFooter(){
         <div class="fname">${SITE.centerName}${SITE.representative?' | 대표: '+SITE.representative:''}</div>
         <p>주소: ${SITE.addressBr || SITE.address}</p>
         <p>T. ${SITE.phone}${SITE.email?' | E. '+SITE.email:''}</p>
-        ${SITE.businessNumber?`<p>사업자등록번호: ${SITE.businessNumber}</p>`:''}
+        ${(SITE.businessNumber||SITE.mailOrderNumber)?`<p>${[
+          SITE.businessNumber ? '사업자등록번호: '+SITE.businessNumber : '',
+          SITE.mailOrderNumber ? '통신판매업: '+SITE.mailOrderNumber : ''
+        ].filter(Boolean).join(' | ')}</p>`:''}
+        <p class="foot-links"><a href="${ROOT}pages/privacy.html">개인정보처리방침</a></p>
+        <p class="foot-copy">© ${SITE.copyrightYear||new Date().getFullYear()} ${SITE.centerName}. All rights reserved.<br>
+          이 홈페이지의 사진과 글은 저작권법의 보호를 받으며, 무단 복제·전재·배포를 금합니다.</p>
       </div>
     </footer>`;
 }

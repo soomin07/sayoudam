@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Gowun+Dodum&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../style.css?v=9">
+<link rel="stylesheet" href="../style.css?v=11">
 </head>
 <body>
 
@@ -41,8 +41,8 @@
 
 <div id="siteFooter"></div>
 
-<script src="../data.js?v=9"></script>
-<script src="../common.js?v=9"></script>
+<script src="../data.js?v=11"></script>
+<script src="../common.js?v=11"></script>
 <script>
 (function(){
   var c = SITE.counselor;
@@ -91,6 +91,22 @@
   });
 
   host.innerHTML = html;
+
+  /* ── 메인 홈의 '상담사 소개 더 보기'로 들어온 경우(주소 끝에 #team)
+        '함께하는 상담사'가 화면 맨 위에 오도록 내려줍니다.
+        상단 메뉴(센터 소개 → 상담사 소개)로 들어오면 #team 이 없으므로
+        평소처럼 페이지 맨 위부터 보입니다. ── */
+  if(location.hash === '#team'){
+    var jump = function(){
+      var bar = document.querySelector('.topbar');           // 상단 고정 메뉴
+      var gap = (bar ? bar.offsetHeight : 0) + 16;           // 메뉴에 가리지 않도록 여유
+      var y = host.getBoundingClientRect().top + window.pageYOffset - gap;
+      window.scrollTo(0, y < 0 ? 0 : y);
+    };
+    // 사진이 늦게 불러와지며 위치가 밀릴 수 있어 두 번 맞춥니다.
+    requestAnimationFrame(jump);
+    window.addEventListener('load', function(){ setTimeout(jump, 60); });
+  }
 })();
 </script>
 </body>
