@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>노인상담 · 사유담심리상담센터</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css?v=15">
+</head>
+<body>
+
+<div id="siteHeader"></div>
+
+<div class="page-hero">
+  <div class="wrap">
+    <div class="eyebrow">Senior Counseling</div>
+    <h1>노인상담</h1>
+    <p>지나온 시간을 함께 돌아보고, 지금의 마음을 편안히 놓아두는 자리입니다.</p>
+  </div>
+</div>
+
+<div class="page-body">
+  <div class="wrap prog-body">
+
+    <div class="prog-section">
+      <p class="prog-lead">나이가 든다는 것은 익숙한 것들과<br>천천히 헤어지는 일이기도 합니다.</p>
+      <p>일에서 물러나고, 몸이 예전 같지 않고, 곁에 있던 사람들이 하나둘 떠나갑니다. 자녀는 각자의 삶으로 바빠지고, 하루가 조용해집니다. 그 조용함 속에서 문득 밀려오는 마음들이 있습니다. 아쉬움, 서운함, 어디에도 꺼내기 어려운 외로움 같은 것들이요.</p>
+      <p>노인상담은 그 마음을 판단 없이 들어드리는 자리입니다. 무엇을 고치거나 바꾸려는 것이 아니라, 지나온 시간에 담긴 의미를 함께 찾아보고 남은 날들을 조금 더 편안하게 지내시도록 곁에서 돕습니다.</p>
+    </div>
+
+    <div class="prog-section">
+      <h2>이런 분께 권합니다</h2>
+      <ul class="rec-list">
+        <li>은퇴 후의 시간을 어떻게 보낼지 막막하신 분</li>
+        <li>배우자·친구와의 이별로 마음이 무거우신 분</li>
+        <li>혼자 지내는 시간이 길어져 외로움을 느끼시는 분</li>
+        <li>건강의 변화로 마음까지 위축되신 분</li>
+        <li>자녀와의 관계에서 서운함이 쌓이신 분</li>
+        <li>잠들기 어렵거나 기운이 나지 않는 날이 이어지는 분</li>
+        <li>지나온 삶을 한번 정리하며 돌아보고 싶으신 분</li>
+        <li>부모님을 돌보며 지친 가족</li>
+      </ul>
+    </div>
+
+    <div class="prog-section">
+      <h2>사유담의 노인상담</h2>
+      <div class="approach-box">
+        <p class="emph">서두르지 않습니다. 어르신의 속도에 맞춰 함께 걷습니다.</p>
+        <p>살아오신 이야기를 충분히 듣는 것에서 시작합니다. 그 안에는 이미 스스로를 지탱해 온 힘이 담겨 있습니다. 그 힘을 함께 찾아내어 지금의 어려움을 견디는 자리로 옮겨놓는 것이 상담의 방향입니다.</p>
+        <p style="margin-bottom:0">말로 꺼내기 어려운 마음은 <a class="rec-link" href="program-phototherapy.html">사진</a>을 매개로 풀어가기도 합니다. 한 장의 풍경을 함께 바라보는 동안, 설명하기 어렵던 감정이 자연스럽게 이야기가 되어 나옵니다. 필요에 따라 자녀분과 함께하는 <a class="rec-link" href="program-family.html">가족상담</a>을 병행할 수도 있습니다.</p>
+      </div>
+    </div>
+
+    <div class="prog-section">
+      <h2>상담 안내</h2>
+      <div class="info-box">
+        <div class="info-row"><span class="k">상담 시간</span><span class="v">50분</span></div>
+        <div class="info-row"><span class="k">상담 주기</span><span class="v">주 1회를 권장하며, 상황에 따라 조정할 수 있습니다.</span></div>
+        <div class="info-row"><span class="k">상담 횟수</span><span class="v">어르신의 상황과 상담 목표에 따라 협의하여 진행합니다.</span></div>
+        <div class="info-row"><span class="k">함께 오실 때</span><span class="v">보호자와 함께 오셔도 좋습니다. 첫 회기에 편하신 방식을 함께 정합니다.</span></div>
+      </div>
+      <p class="muted" style="margin-top:16px">예약은 전화(<span id="snPhone"></span>)로도 편하게 하실 수 있습니다. 자녀분이 대신 문의해 주셔도 됩니다.</p>
+    </div>
+
+    <div class="page-actions">
+      <a class="back-home" href="../index.html">← 홈으로 돌아가기</a>
+      <a class="page-cta" href="#" onclick="window.open(SITE.applyForm,'_blank');return false;">상담 신청서 바로가기</a>
+    </div>
+  </div>
+</div>
+
+<div id="siteFooter"></div>
+
+<script src="../data.js?v=15"></script>
+<script src="../common.js?v=15"></script>
+<script>
+(function(){ var el=document.getElementById('snPhone'); if(el) el.textContent = SITE.phone || ''; })();
+</script>
+</body>
+</html>

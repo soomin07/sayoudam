@@ -78,9 +78,11 @@ const SITE = {
         { label: '개인상담', target: 'pages/program-personal.html' },
         { label: '커플·부부상담', target: 'pages/program-couple.html' },
         { label: '청소년·부모상담', target: 'pages/program-youth.html' },
+        { label: '노인상담', target: 'pages/program-senior.html' },
         { label: '가족상담', target: 'pages/program-family.html' },
         { label: '기업·직장인 상담', target: 'pages/program-eap.html' },
         { label: '사진치료', target: 'pages/program-phototherapy.html' },
+        { label: '비대면 상담', target: 'pages/program-online.html' },
     ]},
     { title: '교육·집단 프로그램', items: [
         { label: '부모교육', target: 'pages/program-parent-edu.html' },
