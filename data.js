@@ -272,16 +272,20 @@ const SITE = {
   // 직접 만든 지도 이미지 파일명을 넣으세요
   mapImage: 'map.jpg',   // images 폴더에 지도 이미지 넣고 파일명 지정
 
-  /* ---------- 협력/유관 기관 (흐르는 띠) ----------
-     - label: 표시할 이름
-     - url: 클릭 시 이동할 주소 (없으면 클릭 안 됨)
-     - logo: 로고 이미지 파일명 (넣으면 글자 대신 로고. 없으면 글자로 표시) */
+  /* ---------- 함께하는 기관 (오시는 길 아래 흐르는 띠) ----------
+     - label: 기관 이름 (로고에 마우스를 올리면 보이고, 화면낭독기도 읽어줍니다)
+     - url  : 클릭 시 새 창으로 열릴 주소 (비우면 클릭 안 됨)
+     - logo : images/partners 폴더의 로고 파일명 (비우면 글자로 표시)
+     - sub  : 로고 옆에 작게 붙는 설명 (지점명 등, 필요할 때만)
+     기관을 추가하려면 { } 줄을 복사하세요. */
   partners: [
-    { label: '정신건강 심리상담 바우처', url: 'https://www.bokjiro.go.kr', logo: '' },
-    { label: '원주시청소년상담복지센터', url: '', logo: '' },
-    { label: '원주시가족센터', url: '', logo: '' },
-    { label: '원주시육아종합지원센터', url: '', logo: '' },
-    /* ※ 실제로 근무·강의·집단상담 이력이 있는 곳만 올려주세요.
+    { label: '원주시가족센터', url: 'https://wonju.familynet.or.kr', logo: 'partners/wonju-family.png' },
+    { label: '상지대학교', url: 'https://www.sangji.ac.kr', logo: 'partners/sangji.png' },
+    { label: '한국심리학회', url: 'https://www.koreanpsychology.or.kr', logo: 'partners/kpa.png' },
+    { label: '한국상담심리학회', url: 'https://www.krcpa.or.kr', logo: 'partners/krcpa.png' },
+    { label: '한국상담학회', url: 'https://www.counselors.or.kr', logo: 'partners/kca.png' },
+    { label: '허그맘허그인 세종센터', url: 'https://www.hugmom.co.kr/sejong', logo: 'partners/hugmom.png', sub: '세종센터' },
+    /* ※ 실제로 근무·강의·집단상담·회원 활동 등 관계가 있는 곳만 올려주세요.
        관계가 없는 기관 이름이 섞이면 '협력하는 것처럼 보이게 했다'는
        오해를 살 수 있습니다. (2026-07-27 원주시청·원주교육지원청 제외) */
   ],

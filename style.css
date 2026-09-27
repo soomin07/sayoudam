@@ -139,14 +139,41 @@ section{padding:90px 0}
 .prof-more{padding:6px 0 10px;animation:profFade .3s ease}
 @keyframes profFade{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
 
-/* ===== 협력기관 흐르는 띠 ===== */
-.partners{background:var(--dark);padding:15px 0;overflow:hidden}
-.partners-track{display:flex;gap:0;width:max-content;will-change:transform}
+/* ===== 함께하는 기관 (흐르는 띠) =====
+   오시는 길(아이보리)과 하단 정보 바(와인) 사이, 화면 끝에서 끝까지 이어지는 종이빛 띠.
+   로고는 원래 색 그대로 보이고, 마우스를 올리면 살짝 떠오릅니다. */
+.partners{background:var(--paper);border-top:1px solid var(--line);padding:26px 0}
+.partners-viewport{overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
+          mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.partners-track{display:flex;width:max-content}
+.partners-track.running{animation:partnersFlow var(--pdur,40s) linear infinite}
+.partners-viewport:hover .partners-track,
+.partners-viewport:focus-within .partners-track{animation-play-state:paused}
+@keyframes partnersFlow{to{transform:translateX(calc(-100% / var(--pn,2)))}}
 .pset{display:flex;flex:0 0 auto}
-.partner-item{display:flex;align-items:center;justify-content:center;padding:0 34px;height:34px;color:#cbc6ba;font-size:.92rem;white-space:nowrap;border-right:1px solid rgba(255,255,255,.08);transition:.25s}
-.partner-item:hover{color:#fff}
-.partner-item img{height:26px;width:auto;filter:brightness(0) invert(1) opacity(.8)}
-.partner-item.link{cursor:pointer}
+.partner-item{display:flex;align-items:center;gap:8px;height:64px;padding:0 30px;white-space:nowrap;
+  color:var(--ink-soft);font-size:.92rem;transition:color .35s}
+.partner-item img{height:30px;width:auto;max-width:none;
+  opacity:.88;transition:opacity .35s,transform .35s}
+.partner-sub{font-size:.78rem;color:var(--ink-soft);opacity:.85;transition:color .35s}
+a.partner-item:hover img,a.partner-item:focus-visible img{opacity:1;transform:translateY(-2px)}
+a.partner-item:hover,a.partner-item:hover .partner-sub{color:var(--accent)}
+a.partner-item:focus-visible{outline:1px solid var(--warm);outline-offset:-6px;border-radius:4px}
+/* 로고마다 글자·도형 비율이 달라서, 같은 높이면 크기가 들쭉날쭉해 보이는 것을 보정 */
+.partner-item img[src*="kca"]{height:26px}
+.partner-item img[src*="sangji"]{height:38px}
+.partner-item img[src*="wonju-family"]{height:42px}
+@media(max-width:640px){
+  .partners{padding:14px 0}
+  .partner-item{height:56px;padding:0 22px}
+  .partner-item img{height:26px}
+  .partner-item img[src*="kca"]{height:22px}
+  .partner-item img[src*="sangji"]{height:32px}
+  .partner-item img[src*="wonju-family"]{height:36px}
+}
+/* 움직임 줄이기 설정: 흐르지 않고 손가락/휠로 옆으로 넘겨 보기 */
+@media(prefers-reduced-motion:reduce){.partners-viewport{overflow-x:auto}}
 
 /* ===== 상담소 둘러보기 (모달) ===== */
 .tour-modal{position:fixed;inset:0;z-index:100;background:rgba(25,23,20,.95);display:none;flex-direction:column;padding:40px 24px}

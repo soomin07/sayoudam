@@ -71,47 +71,55 @@ if(SITE.counselor.photo){
   $('portrait').innerHTML = `<img src="images/${SITE.counselor.photo}" alt="${SITE.counselor.name}">`;
 }
 
-/* ---------- 협력기관 흐르는 띠 (끊김 없는 무한 루프) ---------- */
+/* ---------- 함께하는 기관 흐르는 띠 (끊김 없는 무한 루프) ----------
+   같은 묶음(pset)을 화면 폭보다 넉넉히 복제해 두고, CSS 애니메이션으로
+   묶음 하나 길이만큼 흘려보낸 뒤 처음으로 돌아가 이음새가 보이지 않게 합니다.
+   (마우스를 올리거나 키보드로 선택하면 멈춥니다) */
 (function(){
   const track = $('partnersTrack');
-  if(!track || !SITE.partners.length) return;
-  const one = SITE.partners.map(p=>{
-    const inner = p.logo ? `<img src="images/${p.logo}" alt="${p.label}">` : p.label;
+  const list = SITE.partners || [];
+  if(!track || !list.length){ const band = $('partners'); if(band) band.style.display = 'none'; return; }
+
+  const one = list.map(p=>{
+    const inner = (p.logo ? `<img src="images/${p.logo}" alt="${p.label}">` : p.label)
+      + (p.sub ? `<span class="partner-sub">${p.sub}</span>` : '');
     return p.url
-      ? `<a class="partner-item link" href="${p.url}" target="_blank" rel="noopener">${inner}</a>`
-      : `<span class="partner-item">${inner}</span>`;
+      ? `<a class="partner-item" href="${p.url}" target="_blank" rel="noopener" title="${p.label} (새 창)">${inner}</a>`
+      : `<span class="partner-item" title="${p.label}">${inner}</span>`;
   }).join('');
-
-  // 한 세트를 만들고, 화면 폭을 채우고도 남을 만큼 복제한다
   track.innerHTML = `<div class="pset">${one}</div>`;
-  const container = track.parentElement;
-  const first = track.querySelector('.pset');
-  const setWidth = first.offsetWidth;
-  if(setWidth === 0) return;
-  // 화면 폭 + 한 세트만큼 여유가 생기도록 복제
-  while(track.scrollWidth < container.offsetWidth + setWidth){
-    track.appendChild(first.cloneNode(true));
-  }
-  track.appendChild(first.cloneNode(true)); // 안전 여유분 한 세트 더
+  const first = track.firstElementChild;
+  const viewport = track.parentElement;
+  const speed = 38;   // 초당 흐르는 거리(px). 숫자가 클수록 빨라집니다
 
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(reduce) return;
-
-  const speed = 40;           // 초당 이동 픽셀
-  let x = 0, last = null, paused = false;
-  track.addEventListener('mouseenter', ()=> paused = true);
-  track.addEventListener('mouseleave', ()=> paused = false);
-  function tick(ts){
-    if(last == null) last = ts;
-    const dt = (ts - last) / 1000; last = ts;
-    if(!paused){
-      x -= speed * dt;
-      if(x <= -setWidth) x += setWidth;   // 한 세트 지나면 원위치 → 이음새 없음
-      track.style.transform = `translateX(${x}px)`;
+  function build(){
+    // 복제본 정리 후 다시 계산 (화면 크기가 바뀌면 로고 크기도 바뀌므로)
+    while(track.children.length > 1) track.lastElementChild.remove();
+    track.classList.remove('running');
+    const setW = first.offsetWidth;
+    if(!setW) return;
+    const copies = Math.ceil(viewport.offsetWidth / setW) + 1;   // 화면 폭 + 한 묶음 이상
+    for(let i = 0; i < copies; i++){
+      const c = first.cloneNode(true);
+      c.setAttribute('aria-hidden', 'true');                      // 복제본은 화면낭독기·Tab 이동에서 제외
+      c.querySelectorAll('a').forEach(a=> a.tabIndex = -1);
+      track.appendChild(c);
     }
-    requestAnimationFrame(tick);
+    track.style.setProperty('--pn', copies + 1);
+    track.style.setProperty('--pdur', (setW / speed) + 's');
+    track.classList.add('running');
   }
-  requestAnimationFrame(tick);
+
+  // 로고 이미지가 다 불러와진 뒤에 폭을 재야 정확합니다
+  const imgs = [...first.querySelectorAll('img')];
+  Promise.all(imgs.map(img=> img.complete ? null : new Promise(r=>{ img.onload = img.onerror = r; })))
+    .then(build);
+  // 폭이 바뀔 때만 다시 계산 (모바일은 스크롤 중 주소창이 숨으며 높이만 바뀌는데, 그때 띠가 처음으로 튀지 않도록)
+  let rt, lastW = innerWidth;
+  addEventListener('resize', ()=>{
+    if(innerWidth === lastW) return;
+    lastW = innerWidth; clearTimeout(rt); rt = setTimeout(build, 250);
+  }, {passive:true});
 })();
 
 /* ---------- 상담소 둘러보기 모달 ---------- */
