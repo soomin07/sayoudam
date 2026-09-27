@@ -284,7 +284,6 @@ const SITE = {
     { label: '한국심리학회', url: 'https://www.koreanpsychology.or.kr', logo: 'partners/kpa.png' },
     { label: '한국상담심리학회', url: 'https://www.krcpa.or.kr', logo: 'partners/krcpa.png' },
     { label: '한국상담학회', url: 'https://www.counselors.or.kr', logo: 'partners/kca.png' },
-    { label: '허그맘허그인 세종센터', url: 'https://www.hugmom.co.kr/sejong', logo: 'partners/hugmom.png', sub: '세종센터' },
     /* ※ 실제로 근무·강의·집단상담·회원 활동 등 관계가 있는 곳만 올려주세요.
        관계가 없는 기관 이름이 섞이면 '협력하는 것처럼 보이게 했다'는
        오해를 살 수 있습니다. (2026-07-27 원주시청·원주교육지원청 제외) */

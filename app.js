@@ -111,9 +111,14 @@ if(SITE.counselor.photo){
   }
 
   // 로고 이미지가 다 불러와진 뒤에 폭을 재야 정확합니다
+  // (로고 파일을 못 찾으면 물음표 그림 대신 기관 이름 글자로 바꿔 보여줍니다)
+  function fallback(img){ if(img.isConnected) img.replaceWith(document.createTextNode(img.alt)); }
   const imgs = [...first.querySelectorAll('img')];
-  Promise.all(imgs.map(img=> img.complete ? null : new Promise(r=>{ img.onload = img.onerror = r; })))
-    .then(build);
+  Promise.all(imgs.map(img=> new Promise(r=>{
+    if(img.complete){ if(!img.naturalWidth) fallback(img); return r(); }
+    img.onload = r;
+    img.onerror = ()=>{ fallback(img); r(); };
+  }))).then(build);
   // 폭이 바뀔 때만 다시 계산 (모바일은 스크롤 중 주소창이 숨으며 높이만 바뀌는데, 그때 띠가 처음으로 튀지 않도록)
   let rt, lastW = innerWidth;
   addEventListener('resize', ()=>{
